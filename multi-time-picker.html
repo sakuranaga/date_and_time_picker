@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiple Custom Time Input</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    padding: 40px;
+    background-color: #f5f5f5;
+  }
+
+  .demo-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  /* カスタム時刻入力のスタイル */
+  .custom-time-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .custom-time-input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: white;
+    cursor: text;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .custom-time-input:hover {
+    border-color: #bbb;
+  }
+
+  .custom-time-input:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  }
+
+  .time-icon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* タイムピッカーポップアップ */
+  .time-picker-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: none;
+    padding: 8px;
+    width: 160px;
+  }
+
+  .time-picker-popup.show {
+    display: block;
+  }
+
+  .time-picker-container {
+    display: flex;
+    gap: 8px;
+    height: 200px;
+  }
+
+  .time-column {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 4px;
+  }
+
+  .time-column::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .time-column::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .time-column::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+
+  .time-column::-webkit-scrollbar-thumb:hover {
+    background: #999;
+  }
+
+  .time-item {
+    padding: 8px 12px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .time-item:hover {
+    background-color: #f0f0f0;
+  }
+
+  .time-item.selected {
+    background-color: #0066cc;
+    color: white;
+    font-weight: 500;
+  }
+
+  /* 比較用の通常のinput */
+  input[type="time"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  .comparison-note {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* オーバーレイ */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    display: none;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  /* 複数フォーム表示用のグリッド */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="demo-container">
+    <h2>複数設置対応版 - カスタム時刻入力（30分刻み）</h2>
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="startTime">開始時刻：</label>
+        <div class="custom-time-input-wrapper">
+          <input 
+            type="text" 
+            id="startTime" 
+            class="custom-time-input" 
+            placeholder="--:--"
+            readonly
+          >
+          <svg class="time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="endTime">終了時刻：</label>
+        <div class="custom-time-input-wrapper">
+          <input 
+            type="text" 
+            id="endTime" 
+            class="custom-time-input" 
+            placeholder="--:--"
+            readonly
+          >
+          <svg class="time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="breakStart">休憩開始：</label>
+        <div class="custom-time-input-wrapper">
+          <input 
+            type="text" 
+            id="breakStart" 
+            class="custom-time-input" 
+            placeholder="--:--"
+            readonly
+          >
+          <svg class="time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="breakEnd">休憩終了：</label>
+        <div class="custom-time-input-wrapper">
+          <input 
+            type="text" 
+            id="breakEnd" 
+            class="custom-time-input" 
+            placeholder="--:--"
+            readonly
+          >
+          <svg class="time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="normalTime">比較用：通常のtime input</label>
+      <input type="time" id="normalTime">
+    </div>
+
+    <div class="comparison-note">
+      複数のカスタム時刻入力を設置した例です。各フィールドは独立して動作し、<br>
+      分の部分は00と30のみ選択可能です。時と分を選択すると即座に反映されます。
+    </div>
+  </div>
+
+  <!-- 共通のオーバーレイ -->
+  <div class="overlay" id="globalOverlay"></div>
+
+  <script>
+    class CustomTimeInput {
+      constructor(inputElement) {
+        // 文字列の場合は要素を取得
+        this.input = typeof inputElement === 'string' 
+          ? document.getElementById(inputElement) 
+          : inputElement;
+        
+        if (!this.input) {
+          console.error('CustomTimeInput: Input element not found');
+          return;
+        }
+
+        this.wrapper = this.input.parentElement;
+        this.uniqueId = 'time-picker-' + Math.random().toString(36).substr(2, 9);
+        this.overlay = document.getElementById('globalOverlay');
+        
+        this.selectedHour = null;
+        this.selectedMinute = null;
+        this.isOpen = false;
+        this.justOpened = false;
+        
+        this.createPopup();
+        this.generateTimeOptions();
+        this.setupEventListeners();
+      }
+
+      createPopup() {
+        // 各インスタンス専用のポップアップを作成
+        this.popup = document.createElement('div');
+        this.popup.className = 'time-picker-popup';
+        this.popup.id = this.uniqueId;
+        
+        this.popup.innerHTML = `
+          <div class="time-picker-container">
+            <div class="time-column hour-column"></div>
+            <div class="time-column minute-column"></div>
+          </div>
+        `;
+        
+        this.wrapper.appendChild(this.popup);
+        
+        // 各カラムの参照を取得
+        this.hourColumn = this.popup.querySelector('.hour-column');
+        this.minuteColumn = this.popup.querySelector('.minute-column');
+      }
+
+      generateTimeOptions() {
+        // 時間の生成（00-23）
+        let hourHTML = '';
+        for (let i = 0; i < 24; i++) {
+          const hour = i.toString().padStart(2, '0');
+          hourHTML += `<div class="time-item hour-item" data-value="${hour}">${hour}</div>`;
+        }
+        this.hourColumn.innerHTML = hourHTML;
+        
+        // 分の生成（00, 30のみ表示）
+        let minuteHTML = '';
+        minuteHTML += `<div class="time-item minute-item" data-value="00">00</div>`;
+        minuteHTML += `<div class="time-item minute-item" data-value="30">30</div>`;
+        this.minuteColumn.innerHTML = minuteHTML;
+      }
+
+      setupEventListeners() {
+        // 入力フィールドのクリック
+        this.input.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.openPicker();
+        });
+        
+        // フォーカス時
+        this.input.addEventListener('focus', () => {
+          this.openPicker();
+        });
+        
+        // 時間の選択
+        this.hourColumn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (e.target.classList.contains('hour-item')) {
+            this.selectHour(e.target.dataset.value);
+          }
+        });
+        
+        // 分の選択
+        this.minuteColumn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (e.target.classList.contains('minute-item')) {
+            this.selectMinute(e.target.dataset.value);
+          }
+        });
+        
+        // ポップアップ自体のクリックでは閉じないようにする
+        this.popup.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+        
+        // オーバーレイクリックで閉じる
+        this.overlay.addEventListener('click', () => {
+          this.closePicker();
+        });
+        
+        // document全体のクリックで閉じる（ポップアップ外をクリックした場合）
+        document.addEventListener('click', (e) => {
+          if (this.isOpen && !this.justOpened && !this.wrapper.contains(e.target)) {
+            this.closePicker();
+          }
+          if (this.justOpened) {
+            this.justOpened = false;
+          }
+        });
+        
+        // キーボード操作
+        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+      }
+
+      handleKeydown(e) {
+        switch(e.key) {
+          case 'ArrowDown':
+          case 'ArrowUp':
+            e.preventDefault();
+            if (!this.isOpen) {
+              this.openPicker();
+            }
+            break;
+            
+          case 'Enter':
+            e.preventDefault();
+            if (!this.isOpen) {
+              this.openPicker();
+            }
+            break;
+            
+          case 'Escape':
+            e.preventDefault();
+            this.closePicker();
+            break;
+            
+          case 'Tab':
+            this.closePicker();
+            break;
+        }
+      }
+
+      selectHour(hour) {
+        this.selectedHour = hour;
+        
+        // UIの更新
+        this.hourColumn.querySelectorAll('.hour-item').forEach(item => {
+          item.classList.toggle('selected', item.dataset.value === hour);
+        });
+        
+        // 即座に値を更新
+        this.updateInputValue();
+      }
+
+      selectMinute(minute) {
+        this.selectedMinute = minute;
+        
+        // UIの更新
+        this.minuteColumn.querySelectorAll('.minute-item').forEach(item => {
+          item.classList.toggle('selected', item.dataset.value === minute);
+        });
+        
+        // 即座に値を更新
+        this.updateInputValue();
+      }
+
+      updateInputValue() {
+        if (this.selectedHour !== null && this.selectedMinute !== null) {
+          this.input.value = `${this.selectedHour}:${this.selectedMinute}`;
+          
+          // changeイベントを発火
+          this.input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      openPicker() {
+        if (this.isOpen) return;
+        
+        // 他のピッカーを閉じる
+        CustomTimeInput.closeAllPickers(this);
+        
+        this.isOpen = true;
+        this.justOpened = true;
+        this.popup.classList.add('show');
+        this.overlay.classList.add('show');
+        
+        // 現在の値から初期選択を設定
+        const currentValue = this.input.value;
+        if (currentValue) {
+          const [hour, minute] = currentValue.split(':');
+          if (hour) this.selectHour(hour);
+          if (minute) this.selectMinute(minute);
+          
+          // 選択された項目までスクロール
+          setTimeout(() => {
+            const selectedHour = this.hourColumn.querySelector('.hour-item.selected');
+            const selectedMinute = this.minuteColumn.querySelector('.minute-item.selected');
+            
+            if (selectedHour) {
+              this.hourColumn.scrollTop = selectedHour.offsetTop - 100;
+            }
+            if (selectedMinute) {
+              this.minuteColumn.scrollTop = selectedMinute.offsetTop - 20;
+            }
+          }, 10);
+        }
+      }
+
+      closePicker() {
+        this.isOpen = false;
+        this.popup.classList.remove('show');
+        this.overlay.classList.remove('show');
+      }
+
+      // 値を設定するメソッド（プログラムから設定する場合）
+      setValue(timeString) {
+        if (timeString && timeString.match(/^\d{2}:\d{2}$/)) {
+          this.input.value = timeString;
+          const [hour, minute] = timeString.split(':');
+          this.selectedHour = hour;
+          this.selectedMinute = minute;
+        }
+      }
+
+      // 値を取得するメソッド
+      getValue() {
+        return this.input.value;
+      }
+
+      // 破棄メソッド
+      destroy() {
+        if (this.popup && this.popup.parentNode) {
+          this.popup.parentNode.removeChild(this.popup);
+        }
+        CustomTimeInput.instances = CustomTimeInput.instances.filter(instance => instance !== this);
+      }
+
+      // 静的メソッド：すべてのピッカーを閉じる
+      static closeAllPickers(except = null) {
+        CustomTimeInput.instances.forEach(instance => {
+          if (instance !== except && instance.isOpen) {
+            instance.closePicker();
+          }
+        });
+      }
+
+      // 静的メソッド：すべてのインスタンスを取得
+      static getAllInstances() {
+        return CustomTimeInput.instances || [];
+      }
+    }
+
+    // インスタンス管理用の静的プロパティ
+    CustomTimeInput.instances = [];
+
+    // 初期化関数
+    function initializeTimeInputs() {
+      // カスタム時刻入力を持つすべての要素を取得
+      const timeInputs = document.querySelectorAll('.custom-time-input');
+      
+      timeInputs.forEach(input => {
+        const instance = new CustomTimeInput(input);
+        CustomTimeInput.instances.push(instance);
+      });
+    }
+
+    // 個別初期化関数（プログラムから呼び出す場合）
+    function createTimeInput(inputId) {
+      const instance = new CustomTimeInput(inputId);
+      CustomTimeInput.instances.push(instance);
+      return instance;
+    }
+
+    // DOM読み込み完了後に初期化
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeTimeInputs();
+      
+      // 使用例：プログラムからの値設定
+      setTimeout(() => {
+        const startTimeInstance = CustomTimeInput.instances.find(instance => 
+          instance.input.id === 'startTime'
+        );
+        if (startTimeInstance) {
+          startTimeInstance.setValue('09:00');
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
