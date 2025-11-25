@@ -17,7 +17,7 @@
     width: 100%;
 }
 
-/* Input Styling (Optional default style) */
+/* Input Styling */
 .tp-input {
     width: 100%;
     padding: 8px 35px 8px 12px;
@@ -31,6 +31,12 @@
     box-sizing: border-box;
     -webkit-appearance: none;
     appearance: none;
+
+    /* Clock Icon as background image */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>');
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: right 10px center;
 }
 
 .tp-input:hover {
@@ -43,17 +49,7 @@
     box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
 }
 
-/* Icon */
-.tp-icon {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-    opacity: 0.5;
-}
+/* Icon class no longer needed - using background-image on input */
 
 /* Popup */
 .tp-popup {
