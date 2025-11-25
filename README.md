@@ -1,6 +1,6 @@
 # 日付時間ピッカー
 
-カスタム日付ピッカーと時刻ピッカーのJavaScript実装です。
+scriptタグ1つで使えるカスタム日付ピッカー・時刻ピッカーです。
 
 ## なぜカスタムピッカーが必要か
 
@@ -17,46 +17,60 @@ HTML5標準の `<input type="date">` と `<input type="time">` には以下の�
 
 ## デモ
 
-### 開発版（ESモジュール）
 - `index.html` - 日付ピッカーのデモ
-- `multi-time-picker.html` - 時刻ピッカーのデモ（複数設置対応）
+- `multi-time-picker.html` - 時刻ピッカーのデモ
 
-**注意:** これらのファイルはESモジュールを使用しているため、ローカルサーバー経由で開く必要があります。
+HTMLファイルをダブルクリックするだけで動作します。
 
-```bash
-# ローカルサーバーを起動
-python3 -m http.server 8000
-# ブラウザで http://localhost:8000/index.html を開く
+## 使い方
+
+### 日付ピッカー
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>日付ピッカー</title>
+</head>
+<body>
+    <div class="date-picker-wrapper">
+        <input type="text" class="date-input" placeholder="年/月/日" readonly>
+    </div>
+
+    <!-- これだけで動作 -->
+    <script src="dist/datepicker.js"></script>
+</body>
+</html>
 ```
 
-### 本番版（バンドル済み）
-- `index.prod.html` - 日付ピッカーのデモ（本番版）
-- `multi-time-picker.prod.html` - 時刻ピッカーのデモ（本番版）
+### 時刻ピッカー
 
-**メリット:** ファイルをダブルクリックするだけで動作します（サーバー不要）。
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>時刻ピッカー</title>
+</head>
+<body>
+    <div class="tp-wrapper">
+        <input type="text" class="tp-input" placeholder="--:--" readonly>
+        <svg class="tp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+        </svg>
+    </div>
 
-## ビルド方法
-
-このプロジェクトはRollupを使用してESモジュールをバンドルします。
-
-```bash
-# 依存関係のインストール（初回のみ）
-npm install
-
-# ビルド実行
-npm run build
-
-# 開発モード（ファイル監視）
-npm run dev
+    <!-- これだけで動作 -->
+    <script src="dist/timepicker.js"></script>
+</body>
+</html>
 ```
-
-ビルドすると `dist/` ディレクトリに以下のファイルが生成されます：
-- `dist/datepicker.js` (12KB) - 日付ピッカー（CSS込み）
-- `dist/timepicker.js` (11KB) - 時刻ピッカー（CSS込み）
 
 ## 機能詳細
 
-### 日付ピッカー (`datepicker.js` / `datepicker.css`)
+### 日付ピッカー
 
 **HTML5標準では不可能なこと：**
 - 土曜日を青、日曜日を赤で表示
@@ -75,7 +89,7 @@ npm run dev
 - 外側クリックで自動的に閉じる
 - 1ページに複数設置可能
 
-### 時刻ピッカー (`multi-time-picker.html`)
+### 時刻ピッカー
 
 **HTML5標準では不可能なこと：**
 - 30分刻み（00分と30分のみ）の制限
@@ -92,118 +106,41 @@ npm run dev
 - プログラムからの値設定・取得API
 - changeイベントの発火
 
-## 使い方
-
-### 本番環境（バンドル版）- 推奨
-
-ビルド済みのファイルを使用する方法です。サーバー不要でファイルを直接開けます。
-
-**スクリプトを読み込むだけで自動的に初期化されます！**
-
-#### 日付ピッカー
-
-```html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>日付ピッカー</title>
-</head>
-<body>
-    <div class="date-picker-wrapper">
-        <input type="text" class="date-input" placeholder="年/月/日" readonly>
-    </div>
-
-    <!-- これだけで動作！ -->
-    <script src="dist/datepicker.js"></script>
-</body>
-</html>
-```
-
-#### 時刻ピッカー
-
-```html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>時刻ピッカー</title>
-</head>
-<body>
-    <div class="tp-wrapper">
-        <input type="text" class="tp-input" placeholder="--:--" readonly>
-        <svg class="tp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-        </svg>
-    </div>
-
-    <!-- これだけで動作！ -->
-    <script src="dist/timepicker.js"></script>
-</body>
-</html>
-```
-
-### 開発環境（ESモジュール版）
-
-開発時やカスタマイズする場合は、ESモジュール版を使用します。
-
-#### 日付ピッカー
-
-```html
-<link rel="stylesheet" href="datepicker.css">
-
-<div class="date-picker-wrapper">
-    <input type="text" class="date-input" placeholder="年/月/日" readonly>
-</div>
-
-<script type="module">
-    import { DatePicker } from './datepicker.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
-            new DatePicker(wrapper);
-        });
-    });
-</script>
-```
-
-#### 時刻ピッカー
-
-```html
-<link rel="stylesheet" href="timepicker.css">
-
-<div class="tp-wrapper">
-    <input type="text" class="tp-input" placeholder="--:--" readonly>
-    <svg class="tp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M12 6v6l4 2"></path>
-    </svg>
-</div>
-
-<script type="module">
-    import { TimePicker } from './timepicker.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.tp-input').forEach(input => {
-            new TimePicker(input, { minuteStep: 30 });
-        });
-    });
-</script>
-```
-
-### プログラムからの操作
+## プログラムからの操作
 
 ```javascript
-// バンドル版
-const instance = TimePicker.TimePicker.instances[0];
-instance.setValue('09:00');
-const value = instance.getValue(); // "09:00"
+// 日付ピッカー
+const datePicker = DatePicker.DatePicker.instances[0];
+// 値は入力欄から取得: document.querySelector('.date-input').value
 
-// ESモジュール版
-const instance = TimePicker.instances[0];
-instance.setValue('09:00');
-const value = instance.getValue(); // "09:00"
+// 時刻ピッカー
+const timePicker = TimePicker.TimePicker.instances[0];
+timePicker.setValue('09:00');
+const value = timePicker.getValue(); // "09:00"
+```
+
+## 開発者向け
+
+ソースコードを編集する場合：
+
+```bash
+# 依存関係のインストール
+npm install
+
+# ビルド（dist/にminify済みファイルを生成）
+npm run build
+
+# 開発モード（ファイル監視）
+npm run dev
+```
+
+## ファイル構成
+
+```
+dist/
+  datepicker.js  (8.5KB) - 日付ピッカー（CSS込み、minify済み）
+  timepicker.js  (7.1KB) - 時刻ピッカー（CSS込み、minify済み）
+```
 
 ## ブラウザ対応
 
