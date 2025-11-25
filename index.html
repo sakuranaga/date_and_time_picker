@@ -11,22 +11,22 @@
     <h2>カスタム日付ピッカーのデモ</h2>
 
     <div class="date-input-container">
-        <label>日付1：</label>
+        <label>日付1（制限なし）：</label>
         <div class="date-picker-wrapper">
             <input type="text" class="date-input" placeholder="年/月/日" readonly>
         </div>
     </div>
 
     <div class="date-input-container">
-        <label>日付2：</label>
-        <div class="date-picker-wrapper">
+        <label>日付2（今日以降のみ）：</label>
+        <div class="date-picker-wrapper" data-min-date="today">
             <input type="text" class="date-input" placeholder="年/月/日" readonly>
         </div>
     </div>
 
     <div class="date-input-container">
-        <label>日付3：</label>
-        <div class="date-picker-wrapper">
+        <label>日付3（2025-12-01〜2025-12-31）：</label>
+        <div class="date-picker-wrapper" data-min-date="2025-12-01" data-max-date="2025-12-31">
             <input type="text" class="date-input" placeholder="年/月/日" readonly>
         </div>
     </div>

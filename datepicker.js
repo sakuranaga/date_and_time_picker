@@ -12,14 +12,52 @@ export class DatePicker {
         // Configuration
         this.config = {
             format: 'YYYY/MM/DD',
+            minDate: null,
+            maxDate: null,
             ...options
         };
+
+        // Parse minDate/maxDate
+        this.minDate = this.parseDate(this.config.minDate);
+        this.maxDate = this.parseDate(this.config.maxDate);
 
         this.selectedDate = null;
         this.currentDate = new Date();
         this.viewDate = new Date();
 
         this.init();
+    }
+
+    /* Parse date option */
+    parseDate(value) {
+        if (!value) return null;
+        if (value === 'today') {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return today;
+        }
+        if (value instanceof Date) return value;
+        // Parse YYYY-MM-DD format
+        const parsed = new Date(value);
+        return isNaN(parsed) ? null : parsed;
+    }
+
+    /* Check if date is disabled */
+    isDisabled(date) {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        
+        if (this.minDate) {
+            const min = new Date(this.minDate);
+            min.setHours(0, 0, 0, 0);
+            if (d < min) return true;
+        }
+        if (this.maxDate) {
+            const max = new Date(this.maxDate);
+            max.setHours(0, 0, 0, 0);
+            if (d > max) return true;
+        }
+        return false;
     }
 
     /* Initialization */
@@ -175,11 +213,10 @@ export class DatePicker {
 
     /* Create Single Day Element */
     createDayElement(date, isOtherMonth) {
-        const dayEl = document.createElement('button'); // Changed to button for accessibility
+        const dayEl = document.createElement('button');
         dayEl.className = 'calendar-day';
         dayEl.textContent = date.getDate();
         dayEl.setAttribute('type', 'button');
-        dayEl.setAttribute('tabindex', isOtherMonth ? '-1' : '0');
 
         const dayOfWeek = date.getDay();
         if (dayOfWeek === 0) dayEl.classList.add('sunday');
@@ -192,16 +229,25 @@ export class DatePicker {
             dayEl.setAttribute('aria-selected', 'true');
         }
 
-        /* Click Selection */
-        dayEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.selectedDate = date;
-            this.viewDate = new Date(date);
-            this.updateCalendar();
-            this.setInputValue();
-            this.hide();
-            this.input.focus();
-        });
+        // Check if date is disabled
+        const disabled = this.isDisabled(date);
+        if (disabled) {
+            dayEl.classList.add('disabled');
+            dayEl.setAttribute('disabled', 'true');
+            dayEl.setAttribute('tabindex', '-1');
+        } else {
+            dayEl.setAttribute('tabindex', isOtherMonth ? '-1' : '0');
+            /* Click Selection */
+            dayEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.selectedDate = date;
+                this.viewDate = new Date(date);
+                this.updateCalendar();
+                this.setInputValue();
+                this.hide();
+                this.input.focus();
+            });
+        }
 
         this.calendarGrid.appendChild(dayEl);
     }
@@ -238,7 +284,18 @@ export class DatePicker {
 if (typeof document !== 'undefined') {
     const init = () => {
         document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
-            new DatePicker(wrapper);
+            // Read options from data attributes
+            const options = {};
+            if (wrapper.dataset.minDate) {
+                options.minDate = wrapper.dataset.minDate;
+            }
+            if (wrapper.dataset.maxDate) {
+                options.maxDate = wrapper.dataset.maxDate;
+            }
+            if (wrapper.dataset.format) {
+                options.format = wrapper.dataset.format;
+            }
+            new DatePicker(wrapper, options);
         });
     };
 

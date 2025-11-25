@@ -168,6 +168,18 @@
     color: #ccc;
 }
 
+.calendar-day.disabled,
+.calendar-day.disabled.sunday,
+.calendar-day.disabled.saturday {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.calendar-day.disabled:hover {
+    background-color: transparent;
+}
+
 .calendar-day.selected {
     background-color: var(--dp-primary-color);
     color: #fff;
