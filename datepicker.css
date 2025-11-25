@@ -174,6 +174,15 @@
     font-weight: 500;
 }
 
+.calendar-day.selected.sunday {
+    background-color: var(--dp-sunday-color);
+    color: #fff;
+}
+
+.calendar-day.selected.saturday {
+    color: #fff;
+}
+
 .calendar-day.today:not(.selected) {
     font-weight: 600;
 }
