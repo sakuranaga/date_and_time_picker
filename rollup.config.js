@@ -1,5 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
+import terser from '@rollup/plugin-terser';
 
 export default [
     // DatePicker bundle
@@ -14,10 +15,11 @@ export default [
         },
         plugins: [
             postcss({
-                inject: true, // Inject CSS into JS
+                inject: true,
                 minimize: true,
             }),
             resolve(),
+            terser(),
         ],
     },
     // TimePicker bundle
@@ -32,10 +34,11 @@ export default [
         },
         plugins: [
             postcss({
-                inject: true, // Inject CSS into JS
+                inject: true,
                 minimize: true,
             }),
             resolve(),
+            terser(),
         ],
     },
 ];
