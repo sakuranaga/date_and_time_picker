@@ -1,0 +1,145 @@
+/* ----------------------------------------------------------
+   timepicker.css : Custom Time Picker Styles
+---------------------------------------------------------- */
+
+:root {
+    --tp-primary-color: #0066cc;
+    --tp-bg-color: #ffffff;
+    --tp-border-color: #ccc;
+    --tp-hover-bg: #f0f0f0;
+    --tp-text-color: #333;
+    --tp-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.tp-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Input Styling (Optional default style) */
+.tp-input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: var(--tp-bg-color);
+    cursor: text;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.tp-input:hover {
+    border-color: #bbb;
+}
+
+.tp-input:focus {
+    outline: none;
+    border-color: var(--tp-primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* Icon */
+.tp-icon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Popup */
+.tp-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: var(--tp-bg-color);
+    border: 1px solid var(--tp-border-color);
+    border-radius: 8px;
+    box-shadow: var(--tp-shadow);
+    z-index: 1000;
+    display: none;
+    padding: 8px;
+    width: 160px;
+}
+
+.tp-popup.show {
+    display: block;
+}
+
+.tp-container {
+    display: flex;
+    gap: 8px;
+    height: 200px;
+}
+
+.tp-column {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 4px;
+}
+
+/* Scrollbar styling */
+.tp-column::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tp-column::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.tp-column::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.tp-column::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* Time Items */
+.tp-item {
+    padding: 8px 12px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.tp-item:hover {
+    background-color: var(--tp-hover-bg);
+}
+
+.tp-item.selected {
+    background-color: var(--tp-primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+/* Overlay */
+.tp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    display: none;
+}
+
+.tp-overlay.show {
+    display: block;
+}

@@ -1,0 +1,24 @@
+{
+  "name": "date-time-picker",
+  "version": "1.0.0",
+  "description": "Custom date and time picker components",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "datepicker",
+    "timepicker",
+    "calendar",
+    "ui"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.9.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}

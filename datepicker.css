@@ -1,19 +1,23 @@
 /* ----------------------------------------------------------
-   datepicker.css  : カスタム日付ピッカー共通スタイル
+   datepicker.css  : Custom Date Picker Styles
 ---------------------------------------------------------- */
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Helvetica Neue", Arial, sans-serif;
-    padding: 20px;
-    background-color: #f5f5f5;
+:root {
+    --dp-primary-color: #0066cc;
+    --dp-sunday-color: #d63638;
+    --dp-saturday-color: #0066cc;
+    --dp-bg-color: #ffffff;
+    --dp-text-color: #333;
+    --dp-hover-bg: #f0f0f0;
+    --dp-border-radius: 8px;
+    --dp-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .date-input-container {
     margin-bottom: 20px;
 }
 
-/* 入力欄そのもの */
+/* Input Styling */
 .date-input {
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -21,20 +25,14 @@ body {
     font-size: 14px;
     width: 200px;
     cursor: pointer;
+    background-color: #fff;
 
-    /* ▼ 常時表示するカレンダーアイコン（背景画像） */
-    background-image: url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="%23666" stroke-width="1.5" fill="none">\
-<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>\
-<line x1="16" y1="2" x2="16" y2="6"/>\
-<line x1="8"  y1="2" x2="8"  y2="6"/>\
-<line x1="3"  y1="10" x2="21" y2="10"/>\
-</svg>');
+    /* Calendar Icon */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="%23666" stroke-width="1.5" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8"  y1="2" x2="8"  y2="6"/><line x1="3"  y1="10" x2="21" y2="10"/></svg>');
     background-repeat: no-repeat;
     background-size: 14px 14px;
     background-position: right 10px center;
     padding-right: 32px;
-    /* テキストとアイコンの重なり防止 */
 }
 
 .date-picker-wrapper {
@@ -42,16 +40,15 @@ body {
     display: inline-block;
 }
 
-/* --- 以下、日付ピッカーを構成する部品 --- */
-
+/* Picker Component */
 .date-picker {
     position: absolute;
     top: 100%;
     left: 0;
     margin-top: 4px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: var(--dp-bg-color);
+    border-radius: var(--dp-border-radius);
+    box-shadow: var(--dp-shadow);
     padding: 12px;
     width: 280px;
     display: none;
@@ -81,7 +78,7 @@ body {
 
 .today-button {
     font-size: 11px;
-    color: #0066cc;
+    color: var(--dp-primary-color);
     background: #e6f2ff;
     border: none;
     border-radius: 4px;
@@ -112,25 +109,25 @@ body {
 }
 
 .nav-button:hover {
-    background-color: #f0f0f0;
+    background-color: var(--dp-hover-bg);
 }
 
 .month-year-display {
     text-align: center;
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: var(--dp-text-color);
     white-space: nowrap;
 }
 
 .weekday-header.sunday,
 .calendar-day.sunday:not(.other-month) {
-    color: #d63638;
+    color: var(--dp-sunday-color);
 }
 
 .weekday-header.saturday,
 .calendar-day.saturday:not(.other-month) {
-    color: #0066cc;
+    color: var(--dp-saturday-color);
 }
 
 .calendar-grid {
@@ -158,10 +155,13 @@ body {
     transition: all 0.2s;
     position: relative;
     min-height: 32px;
+    border: none;
+    background: transparent;
+    padding: 0;
 }
 
 .calendar-day:hover:not(.other-month) {
-    background-color: #f0f0f0;
+    background-color: var(--dp-hover-bg);
 }
 
 .calendar-day.other-month {
@@ -169,7 +169,7 @@ body {
 }
 
 .calendar-day.selected {
-    background-color: #0066cc;
+    background-color: var(--dp-primary-color);
     color: #fff;
     font-weight: 500;
 }
@@ -179,11 +179,11 @@ body {
 }
 
 .calendar-day.today:not(.selected).sunday {
-    color: #d63638;
+    color: var(--dp-sunday-color);
 }
 
 .calendar-day.today:not(.selected).saturday {
-    color: #0066cc;
+    color: var(--dp-saturday-color);
 }
 
 .calendar-day.today:not(.selected)::after {
@@ -198,19 +198,19 @@ body {
     border-radius: 50%;
 }
 
-.overlay {
+/* Overlay */
+.dp-overlay {
     position: fixed;
     inset: 0;
     z-index: 999;
     display: none;
 }
 
-.overlay.show {
+.dp-overlay.show {
     display: block;
 }
 
-/* --- スマホ対応 --- */
-
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .date-picker {
         width: 260px;
@@ -230,7 +230,6 @@ body {
 
     .month-year-display {
         font-size: 13px;
-        white-space: nowrap;
     }
 
     .today-button {

@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カスタム日付ピッカー（分離版デモ）</title>
-
-    <!-- 日付ピッカー専用スタイル -->
-    <link rel="stylesheet" href="datepicker.css">
+    <title>カスタム日付ピッカー（本番版）</title>
 </head>
 
 <body>
@@ -34,16 +31,8 @@
         </div>
     </div>
 
-    <!-- 日付ピッカー本体 -->
-    <script type="module">
-        import { DatePicker } from './datepicker.js';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
-                new DatePicker(wrapper);
-            });
-        });
-    </script>
+    <!-- Bundled DatePicker (includes CSS and auto-initialization) -->
+    <script src="dist/datepicker.js"></script>
 </body>
 
 </html>
