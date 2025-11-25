@@ -160,7 +160,7 @@
     padding: 0;
 }
 
-.calendar-day:hover:not(.other-month) {
+.calendar-day:hover:not(.other-month):not(.selected) {
     background-color: var(--dp-hover-bg);
 }
 
