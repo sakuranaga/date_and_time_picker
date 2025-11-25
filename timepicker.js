@@ -273,16 +273,15 @@ export class TimePicker {
 
 // Auto-initialization
 if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.tp-input').forEach(input => {
-                new TimePicker(input, { minuteStep: 30 });
-            });
-        });
-    } else {
-        // DOM already loaded
+    const init = () => {
         document.querySelectorAll('.tp-input').forEach(input => {
             new TimePicker(input, { minuteStep: 30 });
         });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 }

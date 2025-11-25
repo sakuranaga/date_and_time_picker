@@ -97,8 +97,12 @@ export class DatePicker {
         /* Today Button */
         this.todayButton.addEventListener('click', (e) => {
             e.stopPropagation();
+            this.selectedDate = new Date();
             this.viewDate = new Date();
             this.updateCalendar();
+            this.setInputValue();
+            this.hide();
+            this.input.focus();
         });
 
         /* Close on Outside Click */
@@ -232,16 +236,15 @@ export class DatePicker {
 
 // Auto-initialization
 if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
-                new DatePicker(wrapper);
-            });
-        });
-    } else {
-        // DOM already loaded
+    const init = () => {
         document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
             new DatePicker(wrapper);
         });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 }
