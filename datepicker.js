@@ -39,7 +39,11 @@ export class DatePicker {
             return today;
         }
         if (value instanceof Date) return value;
-        // Parse YYYY-MM-DD format
+        // Parse YYYY-MM-DD format explicitly to avoid UTC/local timezone ambiguity
+        const match = String(value).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (match) {
+            return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+        }
         const parsed = new Date(value);
         return isNaN(parsed) ? null : parsed;
     }
