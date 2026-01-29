@@ -24,7 +24,6 @@ export class DatePicker {
         this.maxDate = this.parseDate(this.config.maxDate);
 
         this.selectedDate = null;
-        this.currentDate = new Date();
         this.viewDate = new Date();
 
         DatePicker.instances.push(this);
@@ -411,7 +410,7 @@ export class DatePicker {
     }
 
     /* Is Today */
-    isToday(date) { return this.isSameDay(date, this.currentDate); }
+    isToday(date) { return this.isSameDay(date, new Date()); }
 
     /* Is Same Day */
     isSameDay(a, b) {
