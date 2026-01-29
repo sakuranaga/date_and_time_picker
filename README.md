@@ -138,6 +138,55 @@ dist/
 - CSVは内閣府が公開しているShift_JIS形式のものをそのまま使用できます
 - `holiday.csv` が存在しない場合でも正常に動作します（祝日表示なし）
 
+## デザインカスタマイズ
+
+CSS変数を上書きするだけで、ソースコードを編集せずにデザインを変更できます。
+
+### 日付ピッカー
+
+| 変数 | デフォルト | 説明 |
+|------|-----------|------|
+| `--dp-primary-color` | `#0066cc` | 選択日・土曜日の色 |
+| `--dp-sunday-color` | `#d63638` | 日曜・祝日の色 |
+| `--dp-saturday-color` | `#0066cc` | 土曜日の色 |
+| `--dp-bg-color` | `#ffffff` | カレンダーの背景色 |
+| `--dp-text-color` | `#333` | テキスト色 |
+| `--dp-hover-bg` | `#f0f0f0` | ホバー時の背景色 |
+| `--dp-border-radius` | `8px` | カレンダーの角丸 |
+| `--dp-shadow` | `0 4px 20px rgba(0,0,0,0.15)` | カレンダーの影 |
+
+### 時刻ピッカー
+
+| 変数 | デフォルト | 説明 |
+|------|-----------|------|
+| `--tp-primary-color` | `#0066cc` | 選択項目の色 |
+| `--tp-bg-color` | `#ffffff` | ポップアップの背景色 |
+| `--tp-border-color` | `#ccc` | 入力欄の枠線色 |
+| `--tp-hover-bg` | `#f0f0f0` | ホバー時の背景色 |
+| `--tp-text-color` | `#333` | テキスト色 |
+| `--tp-shadow` | `0 10px 30px rgba(0,0,0,0.2)` | ポップアップの影 |
+
+### カスタマイズ例：ダークテーマ
+
+```css
+:root {
+    --dp-primary-color: #4a9eff;
+    --dp-sunday-color: #ff6b6b;
+    --dp-saturday-color: #4a9eff;
+    --dp-bg-color: #1e1e1e;
+    --dp-text-color: #e0e0e0;
+    --dp-hover-bg: #333;
+    --dp-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+    --tp-primary-color: #4a9eff;
+    --tp-bg-color: #1e1e1e;
+    --tp-border-color: #555;
+    --tp-hover-bg: #333;
+    --tp-text-color: #e0e0e0;
+    --tp-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+```
+
 ## プログラムからの操作
 
 ```javascript
