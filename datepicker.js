@@ -77,11 +77,11 @@ export class DatePicker {
         picker.innerHTML = `
             <div class="date-picker-controls">
                 <div class="month-navigation">
-                    <button class="nav-button prev-month" aria-label="Previous Month">‹</button>
+                    <button type="button" class="nav-button prev-month" aria-label="Previous Month">‹</button>
                     <div class="month-year-display" aria-live="polite"></div>
-                    <button class="nav-button next-month" aria-label="Next Month">›</button>
+                    <button type="button" class="nav-button next-month" aria-label="Next Month">›</button>
                 </div>
-                <button class="today-button">今日</button>
+                <button type="button" class="today-button">今日</button>
             </div>
             <div class="calendar-grid" role="grid"></div>
         `;
