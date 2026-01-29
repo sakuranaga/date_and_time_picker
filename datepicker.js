@@ -147,12 +147,12 @@ export class DatePicker {
         /* Month Navigation */
         this.prevButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
             this.updateCalendar();
         });
         this.nextButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
             this.updateCalendar();
         });
 
@@ -213,7 +213,7 @@ export class DatePicker {
                     e.preventDefault();
                     targetIdx = currentIdx + 1;
                     if (targetIdx >= dayButtons.length) {
-                        this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
                         this.updateCalendar();
                         this.focusDayByIndex(0);
                         return;
@@ -223,7 +223,7 @@ export class DatePicker {
                     e.preventDefault();
                     targetIdx = currentIdx - 1;
                     if (targetIdx < 0) {
-                        this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
                         this.updateCalendar();
                         this.focusDayByIndex(-1);
                         return;
@@ -233,7 +233,7 @@ export class DatePicker {
                     e.preventDefault();
                     targetIdx = currentIdx + 7;
                     if (targetIdx >= dayButtons.length) {
-                        this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
                         this.updateCalendar();
                         this.focusDayByIndex(0);
                         return;
@@ -243,7 +243,7 @@ export class DatePicker {
                     e.preventDefault();
                     targetIdx = currentIdx - 7;
                     if (targetIdx < 0) {
-                        this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
                         this.updateCalendar();
                         this.focusDayByIndex(-1);
                         return;
@@ -259,13 +259,13 @@ export class DatePicker {
                     break;
                 case 'PageUp':
                     e.preventDefault();
-                    this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                    this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
                     this.updateCalendar();
                     this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
                     return;
                 case 'PageDown':
                     e.preventDefault();
-                    this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                    this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
                     this.updateCalendar();
                     this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
                     return;
