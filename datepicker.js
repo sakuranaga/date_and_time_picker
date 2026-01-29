@@ -87,6 +87,7 @@ export class DatePicker {
 
         picker.innerHTML = `
             <div class="date-picker-controls">
+                <button type="button" class="clear-button" disabled>クリア</button>
                 <div class="month-navigation">
                     <button type="button" class="nav-button prev-month" aria-label="Previous Month">‹</button>
                     <div class="month-year-display" aria-live="polite"></div>
@@ -105,6 +106,7 @@ export class DatePicker {
         this.prevButton = picker.querySelector('.prev-month');
         this.nextButton = picker.querySelector('.next-month');
         this.todayButton = picker.querySelector('.today-button');
+        this.clearButton = picker.querySelector('.clear-button');
 
         this.createOverlay();
     }
@@ -165,6 +167,17 @@ export class DatePicker {
             this.viewDate = new Date();
             this.updateCalendar();
             this.setInputValue();
+            this.hide();
+            this.input.focus();
+        });
+
+        /* Clear Button */
+        this.clearButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.selectedDate = null;
+            this.input.value = '';
+            this.input.dispatchEvent(new Event('change', { bubbles: true }));
+            this.updateCalendar();
             this.hide();
             this.input.focus();
         });
@@ -341,6 +354,7 @@ export class DatePicker {
         const month = this.viewDate.getMonth();
 
         this.monthYearDisplay.textContent = `${year}年${month + 1}月`;
+        this.clearButton.disabled = !this.selectedDate;
         this.calendarGrid.innerHTML = '';
 
         /* Weekday Headers */

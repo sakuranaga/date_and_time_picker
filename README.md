@@ -63,6 +63,42 @@ HTMLファイルをダブルクリックするだけで動作します。
 </html>
 ```
 
+## オプション設定
+
+### 日付ピッカー
+
+`data-*` 属性で各インスタンスの動作を設定できます。
+
+```html
+<!-- 制限なし -->
+<div class="date-picker-wrapper">
+    <input type="text" class="date-input" placeholder="年/月/日" readonly>
+</div>
+
+<!-- 今日以降のみ選択可能 -->
+<div class="date-picker-wrapper" data-min-date="today">
+    <input type="text" class="date-input" placeholder="年/月/日" readonly>
+</div>
+
+<!-- 特定の範囲のみ選択可能 -->
+<div class="date-picker-wrapper" data-min-date="2025-12-01" data-max-date="2025-12-31">
+    <input type="text" class="date-input" placeholder="年/月/日" readonly>
+</div>
+
+<!-- 出力フォーマットを変更 -->
+<div class="date-picker-wrapper" data-format="YYYY-MM-DD">
+    <input type="text" class="date-input" placeholder="年-月-日" readonly>
+</div>
+```
+
+| 属性 | 説明 | 値の例 |
+|------|------|--------|
+| `data-min-date` | 選択可能な最小日付 | `"today"`, `"2025-12-01"` |
+| `data-max-date` | 選択可能な最大日付 | `"today"`, `"2025-12-31"` |
+| `data-format` | 出力フォーマット（デフォルト: `YYYY/MM/DD`） | `"YYYY-MM-DD"`, `"YYYY/MM/DD"` |
+
+範囲外の日付はグレーアウトされ、選択できなくなります。
+
 ## 機能詳細
 
 ### 日付ピッカー
@@ -228,6 +264,14 @@ dist/
 - Safari
 - iOS Safari
 - Android Chrome
+
+## TODO
+
+- [ ] 「今日」「クリア」ボタンの表示/非表示オプション
+- [ ] 日付ピッカーのプログラムAPI（`setValue()`, `getValue()`, `open()`, `close()`）
+- [ ] 初期値設定（`data-value` 属性）
+- [ ] 選択不可曜日の指定（定休日など）
+- [ ] 英語README
 
 ## ライセンス
 

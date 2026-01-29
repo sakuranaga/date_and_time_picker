@@ -76,7 +76,8 @@
     transform: translateX(-50%);
 }
 
-.today-button {
+.today-button,
+.clear-button {
     font-size: 11px;
     color: var(--dp-primary-color);
     background: #e6f2ff;
@@ -85,11 +86,21 @@
     padding: 4px 12px;
     cursor: pointer;
     transition: background-color 0.2s;
+}
+
+.today-button {
     margin-left: auto;
 }
 
-.today-button:hover {
+.today-button:hover,
+.clear-button:hover:not(:disabled) {
     background-color: #cce5ff;
+}
+
+.clear-button:disabled {
+    color: #aaa;
+    background: #f5f5f5;
+    cursor: default;
 }
 
 .nav-button {
