@@ -63,8 +63,9 @@
 
 <body>
     <div class="demo-container">
-        <h2>カスタム時刻ピッカーのデモ（30分刻み）</h2>
+        <h2>カスタム時刻ピッカーのデモ</h2>
 
+        <h3>30分刻み（デフォルト）</h3>
         <div class="form-grid">
             <div class="form-group">
                 <label for="startTime">開始時刻：</label>
@@ -81,18 +82,32 @@
             </div>
         </div>
 
+        <h3>15分刻み</h3>
         <div class="form-grid">
             <div class="form-group">
-                <label for="breakStart">休憩開始：</label>
+                <label for="meeting">会議時刻：</label>
                 <div class="tp-wrapper">
-                    <input type="text" id="breakStart" class="tp-input" placeholder="--:--" readonly>
+                    <input type="text" id="meeting" class="tp-input" data-minute-step="15" placeholder="--:--" readonly>
                 </div>
             </div>
+        </div>
 
+        <h3>5分刻み</h3>
+        <div class="form-grid">
             <div class="form-group">
-                <label for="breakEnd">休憩終了：</label>
+                <label for="alarm">アラーム：</label>
                 <div class="tp-wrapper">
-                    <input type="text" id="breakEnd" class="tp-input" placeholder="--:--" readonly>
+                    <input type="text" id="alarm" class="tp-input" data-minute-step="5" placeholder="--:--" readonly>
+                </div>
+            </div>
+        </div>
+
+        <h3>1分刻み</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="precise">正確な時刻：</label>
+                <div class="tp-wrapper">
+                    <input type="text" id="precise" class="tp-input" data-minute-step="1" placeholder="--:--" readonly>
                 </div>
             </div>
         </div>
@@ -104,8 +119,8 @@
         </div>
 
         <div class="comparison-note">
-            複数のカスタム時刻入力を設置した例です。各フィールドは独立して動作し、<br>
-            分の部分は00と30のみ選択可能です。時と分を選択すると即座に反映されます。
+            <code>data-minute-step</code> 属性で分の刻みを設定できます（30, 15, 10, 5, 1）。<br>
+            未指定の場合はデフォルトの30分刻みになります。
         </div>
     </div>
 

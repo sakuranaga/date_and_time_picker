@@ -57,7 +57,17 @@ HTMLファイルをダブルクリックするだけで動作します。
     <title>時刻ピッカー</title>
 </head>
 <body>
+    <!-- 30分刻み（デフォルト） -->
     <input type="text" class="tp-input" placeholder="--:--" readonly>
+
+    <!-- 15分刻み -->
+    <input type="text" class="tp-input" data-minute-step="15" placeholder="--:--" readonly>
+
+    <!-- 5分刻み -->
+    <input type="text" class="tp-input" data-minute-step="5" placeholder="--:--" readonly>
+
+    <!-- 1分刻み -->
+    <input type="text" class="tp-input" data-minute-step="1" placeholder="--:--" readonly>
 
     <!-- これだけで動作 -->
     <script src="dist/timepicker.js"></script>
@@ -101,6 +111,28 @@ HTMLファイルをダブルクリックするだけで動作します。
 
 範囲外の日付はグレーアウトされ、選択できなくなります。
 
+### 時刻ピッカー
+
+`data-minute-step` 属性で分の刻み幅を設定できます。
+
+```html
+<!-- 30分刻み（デフォルト） -->
+<input type="text" class="tp-input" placeholder="--:--" readonly>
+
+<!-- 15分刻み -->
+<input type="text" class="tp-input" data-minute-step="15" placeholder="--:--" readonly>
+
+<!-- 5分刻み -->
+<input type="text" class="tp-input" data-minute-step="5" placeholder="--:--" readonly>
+
+<!-- 1分刻み -->
+<input type="text" class="tp-input" data-minute-step="1" placeholder="--:--" readonly>
+```
+
+| 属性 | 説明 | 値の例 |
+|------|------|--------|
+| `data-minute-step` | 分の刻み幅（デフォルト: `30`） | `"1"`, `"5"`, `"10"`, `"15"`, `"30"` |
+
 ## 機能詳細
 
 ### 日付ピッカー
@@ -127,15 +159,15 @@ HTMLファイルをダブルクリックするだけで動作します。
 ### 時刻ピッカー
 
 **HTML5標準では不可能なこと：**
-- 30分刻み（00分と30分のみ）の制限
+- 分の刻み幅の制限（30分刻み、15分刻みなど）
 - スクロール式のモダンなUI
 - 時と分を別々のカラムで選択
 - 選択肢の制限（業務時間のみ表示など）
 
 **機能一覧：**
 - スクロール式の時刻選択UI
-- 時（00-23）と分（00, 30）の2カラム選択
-- 30分刻みの時刻入力に特化
+- 時（00-23）と分の2カラム選択
+- 分の刻み幅を `data-minute-step` 属性で設定可能（1, 5, 10, 15, 30分）
 - 複数の入力欄が独立して動作
 - キーボード操作対応（↑↓キー、Enter、Escape）
 - プログラムからの値設定・取得API

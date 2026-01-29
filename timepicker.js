@@ -275,7 +275,8 @@ export class TimePicker {
 if (typeof document !== 'undefined') {
     const init = () => {
         document.querySelectorAll('.tp-input').forEach(input => {
-            new TimePicker(input, { minuteStep: 30 });
+            const step = parseInt(input.dataset.minuteStep, 10) || 30;
+            new TimePicker(input, { minuteStep: step });
         });
     };
 
