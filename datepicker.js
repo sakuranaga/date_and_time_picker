@@ -149,6 +149,138 @@ export class DatePicker {
                 this.hide();
             }
         });
+
+        /* Escape Key to Close */
+        this.picker.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                this.hide();
+                this.input.focus();
+            }
+        });
+        this.input.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.picker.classList.contains('show')) {
+                e.preventDefault();
+                this.hide();
+            }
+        });
+
+        /* Focus Trap */
+        this.picker.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab') return;
+            const focusable = this.picker.querySelectorAll(
+                'button:not([disabled]):not([tabindex="-1"])'
+            );
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
+
+        /* Arrow Key Navigation in Calendar Grid */
+        this.calendarGrid.addEventListener('keydown', (e) => {
+            const dayButtons = Array.from(
+                this.calendarGrid.querySelectorAll('.calendar-day:not(.disabled)')
+            );
+            const currentIdx = dayButtons.indexOf(document.activeElement);
+            if (currentIdx === -1) return;
+
+            let targetIdx = -1;
+            switch (e.key) {
+                case 'ArrowRight':
+                    e.preventDefault();
+                    targetIdx = currentIdx + 1;
+                    if (targetIdx >= dayButtons.length) {
+                        this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                        this.updateCalendar();
+                        this.focusDayByIndex(0);
+                        return;
+                    }
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    targetIdx = currentIdx - 1;
+                    if (targetIdx < 0) {
+                        this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                        this.updateCalendar();
+                        this.focusDayByIndex(-1);
+                        return;
+                    }
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    targetIdx = currentIdx + 7;
+                    if (targetIdx >= dayButtons.length) {
+                        this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                        this.updateCalendar();
+                        this.focusDayByIndex(0);
+                        return;
+                    }
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    targetIdx = currentIdx - 7;
+                    if (targetIdx < 0) {
+                        this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                        this.updateCalendar();
+                        this.focusDayByIndex(-1);
+                        return;
+                    }
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    targetIdx = 0;
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    targetIdx = dayButtons.length - 1;
+                    break;
+                case 'PageUp':
+                    e.preventDefault();
+                    this.viewDate.setMonth(this.viewDate.getMonth() - 1);
+                    this.updateCalendar();
+                    this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
+                    return;
+                case 'PageDown':
+                    e.preventDefault();
+                    this.viewDate.setMonth(this.viewDate.getMonth() + 1);
+                    this.updateCalendar();
+                    this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
+                    return;
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    dayButtons[currentIdx].click();
+                    return;
+                default:
+                    return;
+            }
+            if (targetIdx >= 0 && targetIdx < dayButtons.length) {
+                dayButtons[targetIdx].focus();
+            }
+        });
+    }
+
+    /* Focus a day button by index (negative index counts from end) */
+    focusDayByIndex(index) {
+        const dayButtons = this.calendarGrid.querySelectorAll(
+            '.calendar-day:not(.disabled)'
+        );
+        if (dayButtons.length === 0) return;
+        const idx = index < 0 ? dayButtons.length + index : index;
+        const clamped = Math.max(0, Math.min(idx, dayButtons.length - 1));
+        dayButtons[clamped].focus();
+    }
+
+    /* Get count of enabled day buttons */
+    getEnabledDayCount() {
+        return this.calendarGrid.querySelectorAll('.calendar-day:not(.disabled)').length;
     }
 
     /* Show Picker */
@@ -157,7 +289,12 @@ export class DatePicker {
         this.picker.classList.add('show');
         document.querySelector('.dp-overlay').classList.add('show');
 
-        // Focus management could be added here
+        /* Move focus into the picker */
+        const selected = this.calendarGrid.querySelector('.calendar-day.selected:not(.disabled)');
+        const today = this.calendarGrid.querySelector('.calendar-day.today:not(.disabled)');
+        const firstEnabled = this.calendarGrid.querySelector('.calendar-day:not(.disabled):not(.other-month)');
+        const target = selected || today || firstEnabled;
+        if (target) target.focus();
     }
 
     /* Hide Picker */
