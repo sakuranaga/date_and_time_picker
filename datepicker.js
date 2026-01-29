@@ -5,6 +5,8 @@
 import './datepicker.css';
 
 export class DatePicker {
+    static instances = [];
+
     constructor(wrapper, options = {}) {
         this.wrapper = wrapper;
         this.input = wrapper.querySelector('.date-input');
@@ -25,6 +27,7 @@ export class DatePicker {
         this.currentDate = new Date();
         this.viewDate = new Date();
 
+        DatePicker.instances.push(this);
         this.init();
     }
 
@@ -135,7 +138,9 @@ export class DatePicker {
         /* Today Button */
         this.todayButton.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.selectedDate = new Date();
+            const today = new Date();
+            if (this.isDisabled(today)) return;
+            this.selectedDate = today;
             this.viewDate = new Date();
             this.updateCalendar();
             this.setInputValue();
@@ -285,6 +290,11 @@ export class DatePicker {
 
     /* Show Picker */
     show() {
+        /* Close all other open pickers first */
+        DatePicker.instances.forEach(instance => {
+            if (instance !== this) instance.closePicker();
+        });
+
         this.updateCalendar();
         this.picker.classList.add('show');
         document.querySelector('.dp-overlay').classList.add('show');
@@ -297,10 +307,21 @@ export class DatePicker {
         if (target) target.focus();
     }
 
+    /* Close this picker without touching the overlay */
+    closePicker() {
+        this.picker.classList.remove('show');
+    }
+
     /* Hide Picker */
     hide() {
         this.picker.classList.remove('show');
-        document.querySelector('.dp-overlay').classList.remove('show');
+        /* Only hide overlay if no other picker is open */
+        const anyOpen = DatePicker.instances.some(
+            instance => instance.picker.classList.contains('show')
+        );
+        if (!anyOpen) {
+            document.querySelector('.dp-overlay').classList.remove('show');
+        }
     }
 
     /* Generate/Update Calendar */
