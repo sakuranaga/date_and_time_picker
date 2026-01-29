@@ -23,6 +23,11 @@ export class DatePicker {
         this.minDate = this.parseDate(this.config.minDate);
         this.maxDate = this.parseDate(this.config.maxDate);
 
+        // Holidays (Set of "YYYY/M/D" strings)
+        this.holidays = options.holidays instanceof Set
+            ? options.holidays
+            : new Set(options.holidays || []);
+
         this.selectedDate = null;
         this.viewDate = new Date();
 
@@ -385,6 +390,7 @@ export class DatePicker {
         const dayOfWeek = date.getDay();
         if (dayOfWeek === 0) dayEl.classList.add('sunday');
         if (dayOfWeek === 6) dayEl.classList.add('saturday');
+        if (this.isHoliday(date)) dayEl.classList.add('holiday');
 
         if (isOtherMonth) dayEl.classList.add('other-month');
         if (this.isToday(date)) dayEl.classList.add('today');
@@ -424,6 +430,12 @@ export class DatePicker {
         return a.getFullYear() === b.getFullYear() &&
             a.getMonth() === b.getMonth() &&
             a.getDate() === b.getDate();
+    }
+
+    /* Is Holiday */
+    isHoliday(date) {
+        const key = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+        return this.holidays.has(key);
     }
 
     /* Set Input Value */
@@ -469,12 +481,40 @@ export class DatePicker {
     }
 }
 
+// Parse holiday CSV text into a Set of "YYYY/M/D" strings
+function parseHolidayCsv(text) {
+    const holidays = new Set();
+    const datePattern = /^(\d{4}\/\d{1,2}\/\d{1,2})/;
+    const lines = text.split(/\r?\n/);
+    for (const line of lines) {
+        const m = line.match(datePattern);
+        if (m) holidays.add(m[1]);
+    }
+    return holidays;
+}
+
+// Resolve base path from the script's src attribute
+function resolveBasePath() {
+    const currentScript = document.currentScript
+        || (() => {
+            const scripts = document.querySelectorAll('script[src]');
+            return scripts[scripts.length - 1];
+        })();
+    if (currentScript && currentScript.src) {
+        return currentScript.src.substring(0, currentScript.src.lastIndexOf('/') + 1);
+    }
+    return '';
+}
+
 // Auto-initialization
 if (typeof document !== 'undefined') {
-    const init = () => {
+    const basePath = resolveBasePath();
+    const csvUrl = basePath + 'holiday.csv';
+
+    const initWithHolidays = (holidays) => {
         document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
             // Read options from data attributes
-            const options = {};
+            const options = { holidays };
             if (wrapper.dataset.minDate) {
                 options.minDate = wrapper.dataset.minDate;
             }
@@ -486,6 +526,17 @@ if (typeof document !== 'undefined') {
             }
             new DatePicker(wrapper, options);
         });
+    };
+
+    const init = () => {
+        fetch(csvUrl)
+            .then(r => {
+                if (!r.ok) throw new Error(r.status);
+                return r.text();
+            })
+            .then(text => parseHolidayCsv(text))
+            .catch(() => new Set())
+            .then(holidays => initWithHolidays(holidays));
     };
 
     if (document.readyState === 'loading') {

@@ -195,6 +195,19 @@
     color: #fff;
 }
 
+.calendar-day.holiday:not(.other-month) {
+    color: var(--dp-sunday-color);
+}
+
+.calendar-day.holiday.selected {
+    background-color: var(--dp-sunday-color);
+    color: #fff;
+}
+
+.calendar-day.disabled.holiday {
+    color: #ccc;
+}
+
 .calendar-day.today:not(.selected) {
     font-weight: 600;
 }
