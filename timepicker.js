@@ -226,6 +226,30 @@ export class TimePicker {
                 this.scrollToSelection(this.hourColumn);
                 this.scrollToSelection(this.minuteColumn);
             }, 10);
+        } else {
+            // 値が空の場合、現在時刻に近い位置へ選択＋スクロール
+            const now = new Date();
+            const nearestHour = now.getHours().toString().padStart(2, '0');
+            const currentMinute = now.getMinutes();
+            const step = this.config.minuteStep;
+            const nearestMinute = (Math.round(currentMinute / step) * step % 60)
+                .toString().padStart(2, '0');
+
+            this.selectHour(nearestHour);
+            this.selectMinute(nearestMinute);
+
+            setTimeout(() => {
+                this.scrollToSelection(this.hourColumn);
+                this.scrollToSelection(this.minuteColumn);
+            }, 10);
+        }
+    }
+
+    scrollToItem(container, value) {
+        const item = container.querySelector(`[data-value="${value}"]`);
+        if (item) {
+            container.scrollTop = item.offsetTop - container.offsetTop
+                - (container.clientHeight / 2) + (item.clientHeight / 2);
         }
     }
 
