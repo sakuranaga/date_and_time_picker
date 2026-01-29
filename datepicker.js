@@ -115,16 +115,29 @@ export class DatePicker {
 
     /* Event Binding */
     attachEventListeners() {
-        /* Input Click -> Show Picker */
-        this.input.addEventListener('click', () => this.show());
-
-        /* Keyboard Support for Input */
-        this.input.addEventListener('keydown', (e) => {
+        /* Store bound handlers for cleanup in destroy() */
+        this._onInputClick = () => this.show();
+        this._onInputKeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 this.show();
             }
-        });
+            if (e.key === 'Escape' && this.picker.classList.contains('show')) {
+                e.preventDefault();
+                this.hide();
+            }
+        };
+        this._onDocumentClick = (e) => {
+            if (!this.wrapper.contains(e.target) && !this.picker.contains(e.target)) {
+                this.hide();
+            }
+        };
+
+        /* Input Click -> Show Picker */
+        this.input.addEventListener('click', this._onInputClick);
+
+        /* Keyboard Support for Input */
+        this.input.addEventListener('keydown', this._onInputKeydown);
 
         /* Month Navigation */
         this.prevButton.addEventListener('click', (e) => {
@@ -152,11 +165,7 @@ export class DatePicker {
         });
 
         /* Close on Outside Click */
-        document.addEventListener('click', (e) => {
-            if (!this.wrapper.contains(e.target) && !this.picker.contains(e.target)) {
-                this.hide();
-            }
-        });
+        document.addEventListener('click', this._onDocumentClick);
 
         /* Escape Key to Close */
         this.picker.addEventListener('keydown', (e) => {
@@ -164,12 +173,6 @@ export class DatePicker {
                 e.preventDefault();
                 this.hide();
                 this.input.focus();
-            }
-        });
-        this.input.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.picker.classList.contains('show')) {
-                e.preventDefault();
-                this.hide();
             }
         });
 
@@ -438,6 +441,31 @@ export class DatePicker {
 
         this.input.value = value;
         this.input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    /* Cleanup */
+    destroy() {
+        this.hide();
+
+        /* Remove document-level listener */
+        document.removeEventListener('click', this._onDocumentClick);
+
+        /* Remove input listeners */
+        this.input.removeEventListener('click', this._onInputClick);
+        this.input.removeEventListener('keydown', this._onInputKeydown);
+
+        /* Remove picker DOM */
+        this.picker.remove();
+
+        /* Remove from instances */
+        const idx = DatePicker.instances.indexOf(this);
+        if (idx !== -1) DatePicker.instances.splice(idx, 1);
+
+        /* Remove overlay if no instances remain */
+        if (DatePicker.instances.length === 0) {
+            const overlay = document.querySelector('.dp-overlay');
+            if (overlay) overlay.remove();
+        }
     }
 }
 
