@@ -5,10 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カスタム日付ピッカー デモ</title>
+    <style>
+        .theme-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            padding: 8px 16px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .theme-btn:hover {
+            opacity: 0.85;
+        }
+
+        .theme-btn.active {
+            border-color: currentColor;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
     <h2>カスタム日付ピッカーのデモ</h2>
+
+    <div class="theme-selector" id="themeSelector"></div>
 
     <div class="date-input-container">
         <label>日付1（制限なし）：</label>
@@ -33,6 +63,42 @@
 
     <!-- 日付ピッカー（これだけで動作） -->
     <script src="dist/datepicker.js"></script>
+
+    <script>
+        const themes = [
+            { name: 'デフォルト', primary: '#0066cc', sunday: '#d63638', saturday: '#0066cc', bg: '#ffffff', text: '#333', hover: '#f0f0f0' },
+            { name: 'ダーク', primary: '#4a9eff', sunday: '#ff6b6b', saturday: '#4a9eff', bg: '#1e1e1e', text: '#e0e0e0', hover: '#333' },
+            { name: 'グリーン', primary: '#2e7d32', sunday: '#d63638', saturday: '#2e7d32', bg: '#ffffff', text: '#333', hover: '#e8f5e9' },
+            { name: 'パープル', primary: '#7b1fa2', sunday: '#d63638', saturday: '#7b1fa2', bg: '#ffffff', text: '#333', hover: '#f3e5f5' },
+            { name: 'ウォーム', primary: '#e65100', sunday: '#d63638', saturday: '#e65100', bg: '#fff8f0', text: '#333', hover: '#fff3e0' },
+        ];
+
+        const selector = document.getElementById('themeSelector');
+
+        themes.forEach((theme, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'theme-btn' + (i === 0 ? ' active' : '');
+            btn.textContent = theme.name;
+            btn.style.color = theme.primary;
+            btn.addEventListener('click', () => applyTheme(theme, btn));
+            selector.appendChild(btn);
+        });
+
+        function applyTheme(theme, activeBtn) {
+            const root = document.documentElement.style;
+            root.setProperty('--dp-primary-color', theme.primary);
+            root.setProperty('--dp-sunday-color', theme.sunday);
+            root.setProperty('--dp-saturday-color', theme.saturday);
+            root.setProperty('--dp-bg-color', theme.bg);
+            root.setProperty('--dp-text-color', theme.text);
+            root.setProperty('--dp-hover-bg', theme.hover);
+            document.body.style.backgroundColor = theme.bg;
+            document.body.style.color = theme.text;
+
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            activeBtn.classList.add('active');
+        }
+    </script>
 </body>
 
 </html>

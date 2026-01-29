@@ -114,7 +114,8 @@
     justify-content: center;
     border-radius: 4px;
     transition: background-color 0.2s;
-    color: #666;
+    color: var(--dp-text-color);
+    opacity: 0.6;
     font-size: 16px;
     flex-shrink: 0;
 }
@@ -151,7 +152,8 @@
     text-align: center;
     font-size: 11px;
     font-weight: 500;
-    color: #666;
+    color: var(--dp-text-color);
+    opacity: 0.6;
     padding: 4px 0;
 }
 
@@ -161,6 +163,7 @@
     align-items: center;
     justify-content: center;
     font-size: 13px;
+    color: var(--dp-text-color);
     cursor: pointer;
     border-radius: 50%;
     transition: all 0.2s;
@@ -176,13 +179,15 @@
 }
 
 .calendar-day.other-month {
-    color: #ccc;
+    color: var(--dp-text-color);
+    opacity: 0.3;
 }
 
 .calendar-day.disabled,
 .calendar-day.disabled.sunday,
 .calendar-day.disabled.saturday {
-    color: #ccc;
+    color: var(--dp-text-color);
+    opacity: 0.3;
     cursor: not-allowed;
     pointer-events: none;
 }
@@ -216,7 +221,8 @@
 }
 
 .calendar-day.disabled.holiday {
-    color: #ccc;
+    color: var(--dp-text-color);
+    opacity: 0.3;
 }
 
 .calendar-day.today:not(.selected) {
