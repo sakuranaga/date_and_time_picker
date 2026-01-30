@@ -41,4 +41,23 @@ export default [
             terser(),
         ],
     },
+    // DateTimePicker bundle
+    {
+        input: 'datetimepicker.js',
+        output: {
+            file: 'dist/datetimepicker.js',
+            format: 'iife',
+            name: 'DateTimePicker',
+            banner: '/* DateTime Picker - Bundled with Rollup */',
+            extend: true,
+        },
+        plugins: [
+            postcss({
+                inject: true,
+                minimize: true,
+            }),
+            resolve(),
+            terser(),
+        ],
+    },
 ];

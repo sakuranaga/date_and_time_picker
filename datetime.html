@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DateTimePicker デモ</title>
+</head>
+
+<body>
+    <h2>DateTimePicker デモ</h2>
+
+    <div class="date-input-container">
+        <label>日付＋時刻（15分刻み）：</label>
+        <div class="date-picker-wrapper" data-mode="datetime" data-minute-step="15">
+            <input type="text" class="date-input" placeholder="年/月/日 時:分" readonly>
+        </div>
+    </div>
+
+    <div class="date-input-container">
+        <label>時刻のみ（30分刻み）：</label>
+        <div class="date-picker-wrapper" data-mode="time" data-minute-step="30">
+            <input type="text" class="date-input" placeholder="時:分" readonly>
+        </div>
+    </div>
+
+    <div class="date-input-container">
+        <label>日付のみ（デフォルト）：</label>
+        <div class="date-picker-wrapper">
+            <input type="text" class="date-input" placeholder="年/月/日" readonly>
+        </div>
+    </div>
+
+    <script src="dist/datetimepicker.js"></script>
+</body>
+
+</html>
