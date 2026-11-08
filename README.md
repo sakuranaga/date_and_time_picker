@@ -274,11 +274,11 @@ const value = instance.getValue(); // "09:00"
 # 依存関係のインストール（最初と package-lock.json の更新時。npm audit で high 以上があると止まります）
 docker compose run --rm install
 
-# テスト（node:test + jsdom、ネットワークなし）
-docker compose run --rm dev npm test
-
 # ビルド（dist/にminify済みファイルを生成、ネットワークなし）
 docker compose run --rm dev npm run build
+
+# テスト（node:test + jsdom、ネットワークなし）。dist のテストも含むので、先にビルドする
+docker compose run --rm dev npm test
 
 # 開発モード（ファイル監視）
 docker compose run --rm dev npm run dev
@@ -292,9 +292,23 @@ docker compose run --rm dev npm run dev
 
 ```
 dist/
-  datepicker.js  - 日付ピッカー（CSS込み、minify済み）
-  timepicker.js  - 時刻ピッカー（CSS込み、minify済み）
-  holiday.csv    - 祝日データ（任意、内閣府CSVを配置）
+  datepicker.js      - 日付ピッカー（CSS込み、minify済み）
+  timepicker.js      - 時刻ピッカー（CSS込み、minify済み）
+  datetimepicker.js  - 日付・時刻・日付＋時刻の統合ピッカー（CSS込み、minify済み）
+  holiday.csv        - 祝日データ（任意、内閣府CSVを配置）
+```
+
+ソース（ビルドの入力は直下の3つの .js）:
+
+```
+datepicker.js / timepicker.js / datetimepicker.js  - 各ピッカーの入口（CSS の読み込みと自動初期化）
+core/
+  picker-core.js   - DatePicker と DateTimePicker の本体（mode: date / time / datetime）
+  time-columns.js  - 時・分の列（TimePicker と DateTimePicker で共有）
+  date-utils.js    - 日付の計算（範囲判定、月の42マス、整形など）
+  time-utils.js    - 時刻の計算（分の刻み、現在時刻からの初期値、値の解釈）
+  holidays.js      - holiday.csv の読み込み
+  auto-init.js     - .date-picker-wrapper の自動初期化
 ```
 
 ## ブラウザ対応
