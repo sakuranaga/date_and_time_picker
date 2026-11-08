@@ -217,8 +217,7 @@ export class PickerCore {
             this.selectedDate = null;
             this.selectedHour = null;
             this.selectedMinute = null;
-            this.input.value = '';
-            this.input.dispatchEvent(new Event('change', { bubbles: true }));
+            // update the UI first so that change listeners see the final state
             if (mode === 'date' || mode === 'datetime') {
                 this.updateCalendar();
             }
@@ -226,6 +225,8 @@ export class PickerCore {
                 // Reset time selection UI
                 this.timeColumns.clearSelection();
             }
+            this.input.value = '';
+            this.input.dispatchEvent(new Event('change', { bubbles: true }));
             this.hide();
             this.input.focus();
         });

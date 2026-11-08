@@ -197,9 +197,10 @@ export class TimePicker {
     _clear() {
         this.selectedHour = null;
         this.selectedMinute = null;
+        // unselect first so that change listeners see the final state
+        this.timeColumns.clearSelection();
         this.input.value = '';
         this.input.dispatchEvent(new Event('change', { bubbles: true }));
-        this.timeColumns.clearSelection();
         this.closePicker();
         this.input.focus();
     }

@@ -54,8 +54,9 @@ DateTimePicker の time モード（`core/picker-core.js`）:
 
 - 日付モードと同じ `.date-picker-controls`・`.clear-button` を使い、見た目をそろえる。`dp-time-controls` は time モード用の
   余白調整のためのクラス（`datetimepicker.css` に追加。`margin-bottom` を小さくする程度）。
-- クリアの処理は今の日付・datetime 用のハンドラーを全モードで使う形にまとめる: 状態を null にし、input を空にして change、
-  カレンダーがあれば再描画、時刻の列があれば選択表示を消す、閉じる、input にフォーカス。
+- クリアの処理は今の日付・datetime 用のハンドラーを全モードで使う形にまとめる: 状態を null にし、カレンダーがあれば再描画、
+  時刻の列があれば選択表示を消し、**その後で** input を空にして change を発火、閉じる、input にフォーカス
+  （change のリスナーが最終状態を見られるように、表示の更新を先にする。3章の「通知は最終状態で」と同じ考え方）。
 - 有効・無効: 開いたときの時刻の初期化の後で `clearButton.disabled = (selectedHour === null)` にする
   （time モードは開くと必ず値が入るので、開いている間は有効）。
 
@@ -71,7 +72,7 @@ TimePicker（`timepicker.js`、`timepicker.css`）:
 ```
 
 - 見た目は日付ピッカーのクリアボタンに合わせ、色は `--tp-primary-color` を使う（`timepicker.css` に `.tp-controls`・`.tp-clear-button` を追加）。
-- 押すと: `selectedHour`・`selectedMinute` を null、input を空にして change、`timeColumns.clearSelection()`、`closePicker()`、input にフォーカス。
+- 押すと: `selectedHour`・`selectedMinute` を null、`timeColumns.clearSelection()`、input を空にして change、`closePicker()`、input にフォーカス。
 - popup 内のクリックは今も伝播を止めているので、document のクリック処理には影響しない。
 
 ### 2.4 互換性
@@ -117,3 +118,9 @@ TimePicker（`timepicker.js`、`timepicker.css`）:
 ### 第2回（Codex、設計書の再レビュー）
 
 指摘なし。第1回の2件への対応は妥当と確認（blocker / major なし）。
+
+### 第3回（Codex、コードレビュー）
+
+| # | 指摘 | 重大度 | 採否 | 理由 |
+|---|---|---|---|---|
+| 1 | クリアのテストが change の通知時に選択表示が消えていることを要求しているが、設計 2.3 と実装は「change → 選択表示を消す」の順で、テストが失敗する。テストを設計の順に合わせるべき | minor | 一部採用（テストではなく実装と設計を直す） | 不一致の指摘は正しい。ただ、3章で決めた「通知は最終状態で」の原則に合うのはテストの方で、2.3 の手順の書き方が不正確だった。テストの期待値は緩めず、実装を「状態と表示を更新してから change」の順に直し、2.3 を訂正した。date / datetime のクリアでも、change のリスナーから見えるカレンダーと時刻の表示が更新済みになる（値・change の回数・開閉は変わらない） |
