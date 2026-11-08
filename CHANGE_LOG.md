@@ -2,6 +2,14 @@
 
 ## 2026-11-09
 
+### DP-0001 時刻ピッカーを開いたときの振る舞いとクリアボタン
+
+- TimePicker は focus では開かなくなった（クリック・Enter・↑↓で開く）。Tab でフォームを通過しても時刻欄に値が入らない。
+- 時刻ピッカーを開いたときの書き込みと change を1回にした（今までは時と分で2回、途中の値も一瞬入っていた）。
+  開いたときに現在時刻付近（入力済みならその時刻）を入れる挙動は変えていない。
+- DateTimePicker の time モードと TimePicker に「クリア」ボタンを追加。押すと空にして change を発火し、閉じる。
+- 設計書: `docs/20261109-0850-time-open-behavior.md`
+
 ### DP-0010 3つのピッカーのコード共通化
 
 - DatePicker と DateTimePicker の本体を `core/picker-core.js` にまとめ、時・分の列を `core/time-columns.js` で TimePicker と共有した。

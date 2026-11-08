@@ -96,7 +96,10 @@ export class PickerCore {
 
         if (mode === 'time') {
             picker.classList.add('dp-time-only');
-            picker.innerHTML = timeContainer;
+            picker.innerHTML = `
+                <div class="date-picker-controls dp-time-controls">
+                    <button type="button" class="clear-button" disabled>クリア</button>
+                </div>${timeContainer}`;
         } else if (mode === 'datetime') {
             picker.classList.add('dp-datetime');
             picker.innerHTML = `${controls}
@@ -157,6 +160,15 @@ export class PickerCore {
         this.setInputValue();
     }
 
+    /* Select hour and minute together and write the value once (one change event) */
+    _applyTime(hour, minute) {
+        this.selectedHour = hour;
+        this.selectedMinute = minute;
+        this.timeColumns.select('hour', hour);
+        this.timeColumns.select('minute', minute);
+        this.setInputValue();
+    }
+
     /* Scroll time column so selected item is centered */
     scrollToTimeSelection(container) {
         TimeColumns.scrollToSelection(container);
@@ -199,6 +211,25 @@ export class PickerCore {
         /* Keyboard Support for Input */
         this.input.addEventListener('keydown', this._onInputKeydown);
 
+        /* Clear Button (every mode) */
+        this.clearButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.selectedDate = null;
+            this.selectedHour = null;
+            this.selectedMinute = null;
+            this.input.value = '';
+            this.input.dispatchEvent(new Event('change', { bubbles: true }));
+            if (mode === 'date' || mode === 'datetime') {
+                this.updateCalendar();
+            }
+            if (mode === 'time' || mode === 'datetime') {
+                // Reset time selection UI
+                this.timeColumns.clearSelection();
+            }
+            this.hide();
+            this.input.focus();
+        });
+
         /* Calendar controls (date / datetime only) */
         if (mode === 'date' || mode === 'datetime') {
             /* Month Navigation */
@@ -226,23 +257,6 @@ export class PickerCore {
                     this.hide();
                     this.input.focus();
                 }
-            });
-
-            /* Clear Button */
-            this.clearButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.selectedDate = null;
-                this.selectedHour = null;
-                this.selectedMinute = null;
-                this.input.value = '';
-                this.input.dispatchEvent(new Event('change', { bubbles: true }));
-                this.updateCalendar();
-                if (mode === 'datetime') {
-                    // Reset time selection UI
-                    this.timeColumns.clearSelection();
-                }
-                this.hide();
-                this.input.focus();
             });
 
             /* Arrow Key Navigation in Calendar Grid */
@@ -410,6 +424,9 @@ export class PickerCore {
         if (mode === 'time' || mode === 'datetime') {
             this._initTimeOnShow();
         }
+        if (mode === 'time') {
+            this.clearButton.disabled = this.selectedHour === null;
+        }
 
         /* Move focus into the picker */
         if (mode === 'date' || mode === 'datetime') {
@@ -443,8 +460,7 @@ export class PickerCore {
             minuteToSelect = now.minute;
         }
 
-        this.selectHour(hourToSelect);
-        this.selectMinute(minuteToSelect);
+        this._applyTime(hourToSelect, minuteToSelect);
 
         setTimeout(() => {
             this.scrollToTimeSelection(this.hourColumn);
