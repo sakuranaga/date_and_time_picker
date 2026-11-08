@@ -344,6 +344,11 @@
     font-weight: 500;
 }
 
+/* time-only mode: controls row (clear button) above the columns */
+.dp-time-controls {
+    margin-bottom: 8px;
+}
+
 /* time-only mode: compact width */
 .date-picker.dp-time-only {
     width: 180px;

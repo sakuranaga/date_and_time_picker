@@ -73,6 +73,9 @@ export class TimePicker {
         this.popup.setAttribute('aria-label', 'Time Picker');
 
         this.popup.innerHTML = `
+            <div class="tp-controls">
+                <button type="button" class="tp-clear-button">クリア</button>
+            </div>
             <div class="tp-container">
                 <div class="tp-column tp-hour-column" role="listbox" aria-label="Hours"></div>
                 <div class="tp-column tp-minute-column" role="listbox" aria-label="Minutes"></div>
@@ -82,6 +85,7 @@ export class TimePicker {
         this.wrapper.appendChild(this.popup);
         this.hourColumn = this.popup.querySelector('.tp-hour-column');
         this.minuteColumn = this.popup.querySelector('.tp-minute-column');
+        this.clearButton = this.popup.querySelector('.tp-clear-button');
         this.timeColumns = new TimeColumns(this.hourColumn, this.minuteColumn, TIME_CLASSES, this.config.minuteStep);
     }
 
@@ -94,10 +98,6 @@ export class TimePicker {
         // Input interactions
         this.input.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.openPicker();
-        });
-
-        this.input.addEventListener('focus', () => {
             this.openPicker();
         });
 
@@ -115,6 +115,12 @@ export class TimePicker {
             e.stopPropagation();
             const minute = this.timeColumns.itemValue(e.target, 'minute');
             if (minute !== null) this.selectMinute(minute);
+        });
+
+        // Clear: empty the value, unselect, close
+        this.clearButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._clear();
         });
 
         // Prevent closing when clicking inside popup
@@ -171,6 +177,34 @@ export class TimePicker {
         this.updateInputValue();
     }
 
+    /* Select hour and minute together and write the value once (one change event).
+       A missing (undefined / empty) part keeps its current selection; nothing is written when neither applies. */
+    _applyTime(hour, minute) {
+        let applied = false;
+        if (hour) {
+            this.selectedHour = hour;
+            this.timeColumns.select('hour', hour);
+            applied = true;
+        }
+        if (minute) {
+            this.selectedMinute = minute;
+            this.timeColumns.select('minute', minute);
+            applied = true;
+        }
+        if (applied) this.updateInputValue();
+    }
+
+    _clear() {
+        this.selectedHour = null;
+        this.selectedMinute = null;
+        // unselect first so that change listeners see the final state
+        this.timeColumns.clearSelection();
+        this.input.value = '';
+        this.input.dispatchEvent(new Event('change', { bubbles: true }));
+        this.closePicker();
+        this.input.focus();
+    }
+
     updateInputValue() {
         if (this.selectedHour !== null && this.selectedMinute !== null) {
             this.input.value = `${this.selectedHour}:${this.selectedMinute}`;
@@ -192,12 +226,7 @@ export class TimePicker {
         const currentValue = this.input.value;
         if (currentValue) {
             const [hour, minute] = splitTimeValue(currentValue);
-            if (hour) this.selectHour(hour);
-            if (minute) {
-                // Find closest minute if step doesn't match exactly
-                // For now, simple matching
-                this.selectMinute(minute);
-            }
+            this._applyTime(hour, minute);
 
             // Scroll to selection
             setTimeout(() => {
@@ -207,9 +236,7 @@ export class TimePicker {
         } else {
             // 値が空の場合、現在時刻に近い位置へ選択＋スクロール
             const nearest = nearestTime(new Date(), this.config.minuteStep);
-
-            this.selectHour(nearest.hour);
-            this.selectMinute(nearest.minute);
+            this._applyTime(nearest.hour, nearest.minute);
 
             setTimeout(() => {
                 this.scrollToSelection(this.hourColumn);
