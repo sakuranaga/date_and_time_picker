@@ -268,18 +268,25 @@ const value = instance.getValue(); // "09:00"
 
 ## 開発者向け
 
-ソースコードを編集する場合：
+ソースコードを編集する場合は、Docker の中で作業します（ホストでは npm を使いません）。
 
 ```bash
-# 依存関係のインストール
-npm install
+# 依存関係のインストール（最初と package-lock.json の更新時。npm audit で high 以上があると止まります）
+docker compose run --rm install
 
-# ビルド（dist/にminify済みファイルを生成）
-npm run build
+# テスト（node:test + jsdom、ネットワークなし）
+docker compose run --rm dev npm test
+
+# ビルド（dist/にminify済みファイルを生成、ネットワークなし）
+docker compose run --rm dev npm run build
 
 # 開発モード（ファイル監視）
-npm run dev
+docker compose run --rm dev npm run dev
 ```
+
+- `node_modules` は Docker の名前付きボリュームに置かれ、ホストの `node_modules` とは別です。
+- テストは `tests/` にあります。時刻は `TZ=Asia/Tokyo` で固定しています。
+- 設計書は `docs/`、変更履歴は `CHANGE_LOG.md` にあります。
 
 ## ファイル構成
 

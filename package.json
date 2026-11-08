@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "node --import ./tests/helpers/register-css.js --test \"tests/**/*.test.js\""
   },
   "keywords": [
     "datepicker",
@@ -18,7 +19,8 @@
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.2",
+    "jsdom": "^30.1.3",
     "rollup": "^4.9.0",
     "rollup-plugin-postcss": "^4.0.2"
   }
