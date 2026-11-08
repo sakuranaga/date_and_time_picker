@@ -62,9 +62,13 @@ test('TimePicker: an existing value is shown as the selection', async (t) => {
 test('TimePicker: Escape and the overlay close it', async (t) => {
     const { inputs, document } = await start(t, ['']);
     const [input] = inputs;
+    // a real click focuses the input first; jsdom's click() does not, so focus it explicitly
+    input.focus();
     input.click();
+    assert.ok(isOpen(input));
     key(input, 'Escape');
     assert.ok(!isOpen(input));
+    assert.equal(document.activeElement, input);
 
     input.click();
     document.getElementById('tp-global-overlay').click();
