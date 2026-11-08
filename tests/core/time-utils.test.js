@@ -60,11 +60,19 @@ test('nearestTime wraps 23:xx rounding up to 00:00', () => {
 });
 
 test('nearestTime always gives a minute that is one of minuteValues(step)', () => {
-    for (const step of [1, 5, 10, 15, 20, 30]) {
+    for (const step of [1, 5, 7, 9, 10, 15, 17, 20, 30]) {
         const values = minuteValues(step);
         for (let m = 0; m < 60; m++) {
             const { minute } = nearestTime(new Date(2026, 0, 15, 10, m), step);
             assert.ok(values.includes(minute), `step ${step}, minute ${m} -> ${minute}`);
         }
     }
+});
+
+test('nearestTime with a step that does not divide 60 stays on the step grid and carries only past :59', () => {
+    // 59 / 9 rounds to 7, 7 * 9 = 63 >= 60: carries
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 9), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 23, 59), 9), { hour: '00', minute: '00' });
+    // 59 / 7 rounds to 8, 8 * 7 = 56: no carry
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 7), { hour: '10', minute: '56' });
 });
