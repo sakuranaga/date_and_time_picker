@@ -1,0 +1,601 @@
+[
+  {
+    "step": "init",
+    "values": [
+      "",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "f4b66af16b0cb52929ce909cc160b467ed7352352975d33c1d4649b32a6310df",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "click 0",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "60a92b7ccc19f6200bfc19ff3d408918332c49c45c524fb1f5fded9646409727",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "hour 13",
+    "values": [
+      "13:00",
+      ""
+    ],
+    "changes": [
+      "0=13:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "5cff2e7e8929966986529210c675afd2215f5d7c6e0eebb45eadbffac73d4349",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "minute 45",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [
+      "0=13:45"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "51a046df75767a87eb0133afa86fcfe3f3cca3c7ab2056ea454fa3b65bef3114",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "click inside popup",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "51a046df75767a87eb0133afa86fcfe3f3cca3c7ab2056ea454fa3b65bef3114",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay click",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "68ce84cb76b339761cd31d822adf5597c31a33399df2b8dd1c6a1def72bc3cb4",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "focus 0",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [
+      "0=13:45",
+      "0=13:45"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "51a046df75767a87eb0133afa86fcfe3f3cca3c7ab2056ea454fa3b65bef3114",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "escape",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "68ce84cb76b339761cd31d822adf5597c31a33399df2b8dd1c6a1def72bc3cb4",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "arrow down opens",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [
+      "0=13:45",
+      "0=13:45"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "51a046df75767a87eb0133afa86fcfe3f3cca3c7ab2056ea454fa3b65bef3114",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "tab closes",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "68ce84cb76b339761cd31d822adf5597c31a33399df2b8dd1c6a1def72bc3cb4",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "open with \"08:30\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [
+      "0=08:45",
+      "0=08:30"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "1b5c415a7f1aec25d4ed70f36370fed0834ded1e57cda7ef211bcc1c9ee19a0d",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay after \"08:30\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "54c1546240a6178d187399aa7065ef7dca75da9763233e851daf563f957f9f1b",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "open with \"8:5\"",
+    "values": [
+      "8:5",
+      ""
+    ],
+    "changes": [
+      "0=8:30",
+      "0=8:5"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "d03ec8507798c659f8bd5c6dae56dec9f8b6a3f6319f1e0c01f114dae97e3fe9",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay after \"8:5\"",
+    "values": [
+      "8:5",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "ef83b786a624a2a96c820d61bcb2b6a10c463332e062ea3ee993280573f25253",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "open with \"08:30:00\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [
+      "0=08:5",
+      "0=08:30"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "1b5c415a7f1aec25d4ed70f36370fed0834ded1e57cda7ef211bcc1c9ee19a0d",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay after \"08:30:00\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "54c1546240a6178d187399aa7065ef7dca75da9763233e851daf563f957f9f1b",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "open with \"abc\"",
+    "values": [
+      "abc:30",
+      ""
+    ],
+    "changes": [
+      "0=abc:30"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "e4fe175a4f0b9c8392653c2f719a3873079b8fa0f6b635e439440bb3150c8832",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay after \"abc\"",
+    "values": [
+      "abc:30",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "7e0970bb3661b7705db4a9be4adfefb49ef6b9eab4c8a4a0639245f86764c2e6",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "open with \"\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:30",
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "60a92b7ccc19f6200bfc19ff3d408918332c49c45c524fb1f5fded9646409727",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "overlay after \"\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "302cbcc12e217d38c2b4114849a7242849e32d0b75b3477aca4622612aab305f",
+      "cc5bf937d8c3b742d73d32d53884e6a36f313cdade70b54b38bea24847390c87"
+    ]
+  },
+  {
+    "step": "click 0 then 1",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [
+      "0=10:00",
+      "0=10:00",
+      "1=10:00"
+    ],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [
+      10,
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "302cbcc12e217d38c2b4114849a7242849e32d0b75b3477aca4622612aab305f",
+      "48f7d3c86ee1fc1cc60a59d1b397929a0f3809a68f82c1991ee7e8421843b119"
+    ]
+  },
+  {
+    "step": "outside click",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "302cbcc12e217d38c2b4114849a7242849e32d0b75b3477aca4622612aab305f",
+      "48f7d3c86ee1fc1cc60a59d1b397929a0f3809a68f82c1991ee7e8421843b119"
+    ]
+  },
+  {
+    "step": "setValue 09:00",
+    "values": [
+      "09:00",
+      "09:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "302cbcc12e217d38c2b4114849a7242849e32d0b75b3477aca4622612aab305f",
+      "48f7d3c86ee1fc1cc60a59d1b397929a0f3809a68f82c1991ee7e8421843b119"
+    ]
+  },
+  {
+    "step": "setValue invalid",
+    "values": [
+      "09:00",
+      "09:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "302cbcc12e217d38c2b4114849a7242849e32d0b75b3477aca4622612aab305f",
+      "48f7d3c86ee1fc1cc60a59d1b397929a0f3809a68f82c1991ee7e8421843b119"
+    ]
+  },
+  {
+    "step": "destroy 0",
+    "values": [
+      "09:00",
+      "09:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div id=\"tp-global-overlay\" class=\"tp-overlay show\"></div>"
+    ],
+    "focus": "input.tp-input#t0",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "e3b61272c3c362262c069ede092ccc77ccbf63b8740497210b97850d345368b6",
+      "48f7d3c86ee1fc1cc60a59d1b397929a0f3809a68f82c1991ee7e8421843b119"
+    ]
+  }
+]

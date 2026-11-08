@@ -3,6 +3,10 @@
 ---------------------------------------------------------- */
 
 import './timepicker.css';
+import { TimeColumns } from './core/time-columns.js';
+import { nearestTime, splitTimeValue } from './core/time-utils.js';
+
+const TIME_CLASSES = { item: 'tp-item', hourItem: 'tp-hour-item', minuteItem: 'tp-minute-item' };
 
 export class TimePicker {
     static instances = [];
@@ -78,24 +82,12 @@ export class TimePicker {
         this.wrapper.appendChild(this.popup);
         this.hourColumn = this.popup.querySelector('.tp-hour-column');
         this.minuteColumn = this.popup.querySelector('.tp-minute-column');
+        this.timeColumns = new TimeColumns(this.hourColumn, this.minuteColumn, TIME_CLASSES, this.config.minuteStep);
     }
 
     generateTimeOptions() {
-        // Hours (00-23)
-        let hourHTML = '';
-        for (let i = 0; i < 24; i++) {
-            const hour = i.toString().padStart(2, '0');
-            hourHTML += `<div class="tp-item tp-hour-item" data-value="${hour}" role="option" tabindex="-1">${hour}</div>`;
-        }
-        this.hourColumn.innerHTML = hourHTML;
-
-        // Minutes based on step
-        let minuteHTML = '';
-        for (let i = 0; i < 60; i += this.config.minuteStep) {
-            const minute = i.toString().padStart(2, '0');
-            minuteHTML += `<div class="tp-item tp-minute-item" data-value="${minute}" role="option" tabindex="-1">${minute}</div>`;
-        }
-        this.minuteColumn.innerHTML = minuteHTML;
+        // read the step each time, as before: changing config.minuteStep and calling this again re-renders with it
+        this.timeColumns.render(this.config.minuteStep);
     }
 
     setupEventListeners() {
@@ -114,17 +106,15 @@ export class TimePicker {
         // Hour selection
         this.hourColumn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (e.target.classList.contains('tp-hour-item')) {
-                this.selectHour(e.target.dataset.value);
-            }
+            const hour = this.timeColumns.itemValue(e.target, 'hour');
+            if (hour !== null) this.selectHour(hour);
         });
 
         // Minute selection
         this.minuteColumn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (e.target.classList.contains('tp-minute-item')) {
-                this.selectMinute(e.target.dataset.value);
-            }
+            const minute = this.timeColumns.itemValue(e.target, 'minute');
+            if (minute !== null) this.selectMinute(minute);
         });
 
         // Prevent closing when clicking inside popup
@@ -171,25 +161,13 @@ export class TimePicker {
 
     selectHour(hour) {
         this.selectedHour = hour;
-
-        this.hourColumn.querySelectorAll('.tp-hour-item').forEach(item => {
-            const isSelected = item.dataset.value === hour;
-            item.classList.toggle('selected', isSelected);
-            item.setAttribute('aria-selected', isSelected);
-        });
-
+        this.timeColumns.select('hour', hour);
         this.updateInputValue();
     }
 
     selectMinute(minute) {
         this.selectedMinute = minute;
-
-        this.minuteColumn.querySelectorAll('.tp-minute-item').forEach(item => {
-            const isSelected = item.dataset.value === minute;
-            item.classList.toggle('selected', isSelected);
-            item.setAttribute('aria-selected', isSelected);
-        });
-
+        this.timeColumns.select('minute', minute);
         this.updateInputValue();
     }
 
@@ -213,7 +191,7 @@ export class TimePicker {
         // Set initial selection from input value
         const currentValue = this.input.value;
         if (currentValue) {
-            const [hour, minute] = currentValue.split(':');
+            const [hour, minute] = splitTimeValue(currentValue);
             if (hour) this.selectHour(hour);
             if (minute) {
                 // Find closest minute if step doesn't match exactly
@@ -228,15 +206,10 @@ export class TimePicker {
             }, 10);
         } else {
             // 値が空の場合、現在時刻に近い位置へ選択＋スクロール
-            const now = new Date();
-            const nearestHour = now.getHours().toString().padStart(2, '0');
-            const currentMinute = now.getMinutes();
-            const step = this.config.minuteStep;
-            const nearestMinute = (Math.round(currentMinute / step) * step % 60)
-                .toString().padStart(2, '0');
+            const nearest = nearestTime(new Date(), this.config.minuteStep);
 
-            this.selectHour(nearestHour);
-            this.selectMinute(nearestMinute);
+            this.selectHour(nearest.hour);
+            this.selectMinute(nearest.minute);
 
             setTimeout(() => {
                 this.scrollToSelection(this.hourColumn);
@@ -246,18 +219,11 @@ export class TimePicker {
     }
 
     scrollToItem(container, value) {
-        const item = container.querySelector(`[data-value="${value}"]`);
-        if (item) {
-            container.scrollTop = item.offsetTop - container.offsetTop
-                - (container.clientHeight / 2) + (item.clientHeight / 2);
-        }
+        TimeColumns.scrollToItem(container, value);
     }
 
     scrollToSelection(container) {
-        const selected = container.querySelector('.selected');
-        if (selected) {
-            container.scrollTop = selected.offsetTop - container.offsetTop - (container.clientHeight / 2) + (selected.clientHeight / 2);
-        }
+        TimeColumns.scrollToSelection(container);
     }
 
     closePicker() {

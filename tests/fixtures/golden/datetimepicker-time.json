@@ -1,0 +1,509 @@
+[
+  {
+    "step": "init",
+    "values": [
+      "",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "539069d1c82e1f55c1b98789ba205a87297d0819b74599caa1fecbcae40767a9",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open 0",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "b9bf6800834370ceebbaf061d8047aff74ea587f21eeba4a70b52dd76a7a9904",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "hour 13",
+    "values": [
+      "13:00",
+      ""
+    ],
+    "changes": [
+      "0=13:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "450f1355a0e62cdcb3d9beb47d74663d9a3a052e49f8616e4565e84a6804e350",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "minute 45",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [
+      "0=13:45"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "d3fc335fcc74ecca549d2e9e09d362f2f3f63bcbab30ad9ad407a7001e69d765",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "enter on input",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [
+      "0=13:45",
+      "0=13:45"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "d3fc335fcc74ecca549d2e9e09d362f2f3f63bcbab30ad9ad407a7001e69d765",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "escape on picker",
+    "values": [
+      "13:45",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "ea4cb85989c797fd0f36418293ef9116e2942e4fcec7902cfe0e2b3262268c07",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open with \"08:30\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [
+      "0=08:45",
+      "0=08:30"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "afda0930b514688b6b2c0515733cc1cfa8d19110f4af3fd59a74c0eb732a67a5",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "close after \"08:30\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "8f5c1597b3e0f9cd03f9c9ec94de36b823fc2c0949b8a6989b2abde0fc6335a5",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open with \"8:5\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:30",
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "b9bf6800834370ceebbaf061d8047aff74ea587f21eeba4a70b52dd76a7a9904",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "close after \"8:5\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open with \"08:30:00\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [
+      "0=08:00",
+      "0=08:30"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "afda0930b514688b6b2c0515733cc1cfa8d19110f4af3fd59a74c0eb732a67a5",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "close after \"08:30:00\"",
+    "values": [
+      "08:30",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "8f5c1597b3e0f9cd03f9c9ec94de36b823fc2c0949b8a6989b2abde0fc6335a5",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open with \"abc\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:30",
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "b9bf6800834370ceebbaf061d8047aff74ea587f21eeba4a70b52dd76a7a9904",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "close after \"abc\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open with \"\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:00",
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "b9bf6800834370ceebbaf061d8047aff74ea587f21eeba4a70b52dd76a7a9904",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "close after \"\"",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open 0",
+    "values": [
+      "10:00",
+      ""
+    ],
+    "changes": [
+      "0=10:00",
+      "0=10:00"
+    ],
+    "open": [
+      true,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "b9bf6800834370ceebbaf061d8047aff74ea587f21eeba4a70b52dd76a7a9904",
+      "73d336ee3d62628287cc3591d99088e048fb45f8f1e3fd7135ef5fbc0e0058e9"
+    ]
+  },
+  {
+    "step": "open 1 closes 0",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [
+      "1=10:00"
+    ],
+    "open": [
+      false,
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [
+      10
+    ],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "b1752e30388207c3c1a0744759a4ef2041a2bca275b31dded374258b99f6889a"
+    ]
+  },
+  {
+    "step": "outside click",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "8ea5a320777360c19b1ec236e00278e77a21a1215d80439e967b56af701ab039"
+    ]
+  },
+  {
+    "step": "escape on input (closed)",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 2,
+    "dom": [
+      "dbd1ca3e832fd457b2a21bd62a34b4617c1234e4f7b887cc0f83d292c0d59120",
+      "8ea5a320777360c19b1ec236e00278e77a21a1215d80439e967b56af701ab039"
+    ]
+  },
+  {
+    "step": "destroy all",
+    "values": [
+      "10:00",
+      "10:00"
+    ],
+    "changes": [],
+    "open": [
+      false,
+      false
+    ],
+    "overlays": [],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 0,
+    "dom": [
+      "8a409a40dcd182027434668a3f2e0e96d767a81535506ae17b58280d47822562",
+      "3aa930843af9ad31cb01333a394c1e33b5ba7c43e420cd9313fb784c0197aea0"
+    ]
+  }
+]
