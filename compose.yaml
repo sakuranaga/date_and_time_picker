@@ -1,0 +1,24 @@
+# docker compose run --rm install            # install dependencies (network; audit must pass first)
+# docker compose run --rm dev npm test       # tests (no network)
+# docker compose run --rm dev npm run build  # build dist/ (no network)
+
+x-common: &common
+  build: .
+  environment:
+    TZ: Asia/Tokyo
+  volumes:
+    - .:/work
+    # Linux node_modules, kept apart from any host node_modules
+    - node_modules:/work/node_modules
+
+services:
+  install:
+    <<: *common
+    command: ["sh", "-c", "npm audit --audit-level=high && npm ci --no-fund"]
+
+  dev:
+    <<: *common
+    network_mode: none
+
+volumes:
+  node_modules:
