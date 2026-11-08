@@ -75,3 +75,23 @@ for (const [name, className] of [['datepicker', 'DatePicker'], ['datetimepicker'
         assert.equal(Base.instances.length, 1);
     });
 }
+
+test('generateTimeOptions re-renders the minutes with the current config.minuteStep', async (t) => {
+    t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: NOW });
+    env = setupDom('<div class="date-picker-wrapper" data-mode="time"><input class="date-input"></div>'
+        + '<div class="tp-wrapper"><input class="tp-input"></div>');
+    const { DateTimePicker } = await loadModule('datetimepicker');
+    const { TimePicker } = await loadModule('timepicker');
+    await settle();
+    const minutes = (root, cls) => [...root.querySelectorAll(cls)].map((i) => i.dataset.value);
+
+    const dtp = DateTimePicker.instances[0];
+    dtp.config.minuteStep = 15;
+    dtp.generateTimeOptions();
+    assert.deepEqual(minutes(dtp.picker, '.dp-minute-item'), ['00', '15', '30', '45']);
+
+    const tp = TimePicker.instances[0];
+    tp.config.minuteStep = 20;
+    tp.generateTimeOptions();
+    assert.deepEqual(minutes(tp.popup, '.tp-minute-item'), ['00', '20', '40']);
+});

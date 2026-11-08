@@ -139,7 +139,8 @@ export class PickerCore {
 
     /* Generate time column options */
     generateTimeOptions() {
-        this.timeColumns.render();
+        // read the step each time, as before: changing config.minuteStep and calling this again re-renders with it
+        this.timeColumns.render(this.config.minuteStep);
     }
 
     /* Select hour */

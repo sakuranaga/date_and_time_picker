@@ -86,7 +86,8 @@ export class TimePicker {
     }
 
     generateTimeOptions() {
-        this.timeColumns.render();
+        // read the step each time, as before: changing config.minuteStep and calling this again re-renders with it
+        this.timeColumns.render(this.config.minuteStep);
     }
 
     setupEventListeners() {

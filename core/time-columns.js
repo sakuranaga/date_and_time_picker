@@ -22,8 +22,9 @@ export class TimeColumns {
         this.step = step;
     }
 
-    /** Writes the hour (00-23) and minute (by step) items. */
-    render() {
+    /** Writes the hour (00-23) and minute (by step) items. `step` replaces the minute step when given. */
+    render(step = this.step) {
+        this.step = step;
         const { item, hourItem, minuteItem } = this.classes;
         let hourHTML = '';
         for (const hour of HOURS) {
