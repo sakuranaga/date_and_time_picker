@@ -1,0 +1,527 @@
+[
+  {
+    "step": "init",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "9bcef9c9f2b527d33c5a1b4c0094dbd3ec2ad52a5249bde7d711f14617ff1564"
+    ]
+  },
+  {
+    "step": "hour before date",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "290147fbf90d82ff13de0fbcc93561b3c4674410ef95a513e0e9028871cde2b6"
+    ]
+  },
+  {
+    "step": "pick 20",
+    "values": [
+      "2026/01/20 09:00"
+    ],
+    "changes": [
+      "0=2026/01/20 09:00"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "827f80660131be46cecfa12bf2b1389c6e9d64763cce85b4df5d01a37e3ede98"
+    ]
+  },
+  {
+    "step": "hour 14",
+    "values": [
+      "2026/01/20 14:00"
+    ],
+    "changes": [
+      "0=2026/01/20 14:00"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "3f02407ec2efbe183c1ed86f1b8678956a942b114ae729641da1b281a6017406"
+    ]
+  },
+  {
+    "step": "minute 45",
+    "values": [
+      "2026/01/20 14:45"
+    ],
+    "changes": [
+      "0=2026/01/20 14:45"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "f83541d63510fbe3502e6d5222733ab601d18b1a5ed3a74b19be5db258320a60"
+    ]
+  },
+  {
+    "step": "next month",
+    "values": [
+      "2026/01/20 14:45"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "1cb99dea357ff3717e7215b03888aa09d9d5117d2366a3bd1a2961f64578410f"
+    ]
+  },
+  {
+    "step": "today button",
+    "values": [
+      "2026/01/15 14:45"
+    ],
+    "changes": [
+      "0=2026/01/15 14:45"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "f95d179bfa4a0f9103028f1d5efeed4fd5a04b6dd2ed5b3779ddc58ded222d52"
+    ]
+  },
+  {
+    "step": "escape",
+    "values": [
+      "2026/01/15 14:45"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "51d5019d00c75eeb3d85e641b913b614e9859ca4661b3b3c6c405d459f842dab"
+    ]
+  },
+  {
+    "step": "reopen",
+    "values": [
+      "2026/01/15 14:45"
+    ],
+    "changes": [
+      "0=2026/01/15 14:45",
+      "0=2026/01/15 14:45"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today.selected|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "f95d179bfa4a0f9103028f1d5efeed4fd5a04b6dd2ed5b3779ddc58ded222d52"
+    ]
+  },
+  {
+    "step": "arrow left",
+    "values": [
+      "2026/01/15 14:45"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day|14",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "f95d179bfa4a0f9103028f1d5efeed4fd5a04b6dd2ed5b3779ddc58ded222d52"
+    ]
+  },
+  {
+    "step": "enter on day",
+    "values": [
+      "2026/01/14 14:45"
+    ],
+    "changes": [
+      "0=2026/01/14 14:45"
+    ],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "3a1413360b3a8c637fbeee37606c03551ee9c9025e89e1f9b92208bc89cc204d"
+    ]
+  },
+  {
+    "step": "clear",
+    "values": [
+      ""
+    ],
+    "changes": [
+      "0="
+    ],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "9a214525cabca8433caf91227f817ce75fb2daa640b79a2b499e3a76ec9cf430"
+    ]
+  },
+  {
+    "step": "open with \"2026/01/07 08:30\"",
+    "values": [
+      "2026/01/07 08:30"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "287d119b0aaf36de667d3347562b6698b82220a539649cab285babf0129c50ce"
+    ]
+  },
+  {
+    "step": "close after \"2026/01/07 08:30\"",
+    "values": [
+      "2026/01/07 08:30"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "e7e8afcbc895ca0a4c15607b934fe68b089ca4e33666989c0a5a03773f5893a6"
+    ]
+  },
+  {
+    "step": "open with \"2026/01/07 8:5\"",
+    "values": [
+      "2026/01/07 8:5"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "1164c5170e8f8f6d3de38615704477782b10d77664dfc8599d1118af1988aeed"
+    ]
+  },
+  {
+    "step": "close after \"2026/01/07 8:5\"",
+    "values": [
+      "2026/01/07 8:5"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+    ]
+  },
+  {
+    "step": "open with \"2026/01/07 08:30:00\"",
+    "values": [
+      "2026/01/07 08:30:00"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "3c20b4d9c465968909b724970c529dee4f3cf78115d90648a1f537d176e4a2b7"
+    ]
+  },
+  {
+    "step": "close after \"2026/01/07 08:30:00\"",
+    "values": [
+      "2026/01/07 08:30:00"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "668482196adf23f10be21ae80b442facee09ab5cbf36c591a930e1a01e316c33"
+    ]
+  },
+  {
+    "step": "open with \"2026/01/07\"",
+    "values": [
+      "2026/01/07"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "1164c5170e8f8f6d3de38615704477782b10d77664dfc8599d1118af1988aeed"
+    ]
+  },
+  {
+    "step": "close after \"2026/01/07\"",
+    "values": [
+      "2026/01/07"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+    ]
+  },
+  {
+    "step": "open with \"abc\"",
+    "values": [
+      "abc"
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "1164c5170e8f8f6d3de38615704477782b10d77664dfc8599d1118af1988aeed"
+    ]
+  },
+  {
+    "step": "close after \"abc\"",
+    "values": [
+      "abc"
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+    ]
+  },
+  {
+    "step": "open with \"\"",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      true
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay show\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "1164c5170e8f8f6d3de38615704477782b10d77664dfc8599d1118af1988aeed"
+    ]
+  },
+  {
+    "step": "close after \"\"",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "input.date-input#",
+    "timeouts": [],
+    "instances": 1,
+    "dom": [
+      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+    ]
+  },
+  {
+    "step": "open, outside click",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [
+      "<div class=\"dp-overlay\"></div>"
+    ],
+    "focus": "button.calendar-day.today|15",
+    "timeouts": [
+      10
+    ],
+    "instances": 1,
+    "dom": [
+      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+    ]
+  },
+  {
+    "step": "destroy",
+    "values": [
+      ""
+    ],
+    "changes": [],
+    "open": [
+      false
+    ],
+    "overlays": [],
+    "focus": "body",
+    "timeouts": [],
+    "instances": 0,
+    "dom": [
+      "9b0945170cf7b4e67c81e0d36a90d2211765fd3205935476fb803172e00ec5de"
+    ]
+  }
+]
