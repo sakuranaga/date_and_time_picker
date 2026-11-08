@@ -1,6 +1,6 @@
 # 時刻ピッカーを開いたときの振る舞いとクリアボタン（DP-0001）
 
-- ステータス: Reviewed
+- ステータス: Implemented
 - 課題: LAP DP-0001「時刻ピッカーを開いただけで値が入り change が発火する（Tab 通過でも入力される）」
 - 作成: 2026-11-09
 - 前提: DP-0010（共通化）がマージ済み。時刻まわりは `core/picker-core.js`（DateTimePicker の time / datetime）と
@@ -106,6 +106,17 @@ TimePicker（`timepicker.js`、`timepicker.css`）:
   `CHANGE_LOG.md`、`tests/fixtures/golden/`（時刻まわり）
 - 追加: `tests/time-open.test.js`
 
+## 実装時の差異
+
+- TimePicker のクリアの処理は内部メソッド `_clear()` にした（公開 API を増やさないため）。
+- クリアの処理順は、コードレビュー第3回を受けて「状態と表示を更新 → input を空にして change」に変えた（2.3 を訂正済み）。
+- golden の記録の作り直し: `datetimepicker-time`・`datetimepicker-datetime`・`timepicker` の3つ。新旧を比べ、変わったのは
+  開いたときの change（2回 → 最終値で1回）、TimePicker の focus（開かない）、クリアボタンによる DOM だけであることを確認した。
+  `datepicker`・`datetimepicker-date` は変化なし。
+- 結果: ビルド → テスト全体で 114件すべて成功。画面確認（Chrome）: TimePicker と DateTimePicker の time モードのクリアボタンの表示と動作
+  （空になって閉じる）、Tab で次の欄に移っても開かず値が入らないこと。コンソールのエラーなし。
+  画面確認の時刻が 8時50分台で、開いたときの値が 08:00 になったのは DP-0002（時が繰り上がらない）の既知の症状。
+
 ## レビュー記録
 
 ### 第1回（Codex、設計書）
@@ -124,3 +135,7 @@ TimePicker（`timepicker.js`、`timepicker.css`）:
 | # | 指摘 | 重大度 | 採否 | 理由 |
 |---|---|---|---|---|
 | 1 | クリアのテストが change の通知時に選択表示が消えていることを要求しているが、設計 2.3 と実装は「change → 選択表示を消す」の順で、テストが失敗する。テストを設計の順に合わせるべき | minor | 一部採用（テストではなく実装と設計を直す） | 不一致の指摘は正しい。ただ、3章で決めた「通知は最終状態で」の原則に合うのはテストの方で、2.3 の手順の書き方が不正確だった。テストの期待値は緩めず、実装を「状態と表示を更新してから change」の順に直し、2.3 を訂正した。date / datetime のクリアでも、change のリスナーから見えるカレンダーと時刻の表示が更新済みになる（値・change の回数・開閉は変わらない） |
+
+### 第4回（Codex、コードレビューの再レビュー）
+
+指摘なし。第3回の対応（実装の順序を直す）は妥当で、date / datetime のクリアの値・change の回数・開閉・フォーカス・golden は変わらないと確認（blocker / major なし）。
