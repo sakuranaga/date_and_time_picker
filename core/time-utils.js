@@ -14,12 +14,18 @@ export function minuteValues(step) {
     return minutes;
 }
 
-/** The hour of `now` and its minute rounded to the step: { hour, minute } as 2-digit strings. */
+/**
+ * The time of `now` with its minute rounded to the nearest step: { hour, minute } as 2-digit strings.
+ * Rounding up to :60 carries into the next hour (23:xx carries to 00). The minute is always one of minuteValues(step).
+ */
 export function nearestTime(now, step) {
-    const hour = now.getHours().toString().padStart(2, '0');
-    const minute = (Math.round(now.getMinutes() / step) * step % 60)
-        .toString().padStart(2, '0');
-    return { hour, minute };
+    let hour = now.getHours();
+    let minute = Math.round(now.getMinutes() / step) * step;
+    if (minute >= 60) {
+        minute = 0;
+        hour = (hour + 1) % 24;
+    }
+    return { hour: hour.toString().padStart(2, '0'), minute: minute.toString().padStart(2, '0') };
 }
 
 /**
