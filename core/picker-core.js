@@ -272,6 +272,7 @@ export class PickerCore {
                 this.timeColumns.clearSelection();
             }
             this.input.value = '';
+            this._updateClearButton();
             this.input.dispatchEvent(new Event('change', { bubbles: true }));
             this.hide();
             this.input.focus();
@@ -439,8 +440,8 @@ export class PickerCore {
         if (mode === 'time' || mode === 'datetime') {
             this._initTimeOnShow();
         }
+        this._updateClearButton();
         if (mode === 'time') {
-            this.clearButton.disabled = this.selectedHour === null;
             /* Move focus into the picker: the selected hour */
             this.timeColumns.focusItem('hour');
         }
@@ -508,7 +509,7 @@ export class PickerCore {
 
         this.monthYearDisplay.textContent = `${year}年${month + 1}月`;
         this._dayDates = new WeakMap(); // enabled day button -> its date (keyboard navigation)
-        this.clearButton.disabled = !this.selectedDate && this.selectedHour === null;
+        this._updateClearButton();
         this.calendarGrid.innerHTML = '';
 
         /* Weekday Headers */
@@ -580,6 +581,11 @@ export class PickerCore {
         this.calendarGrid.appendChild(dayEl);
     }
 
+    /* The clear button is enabled exactly when the input has a value (there is something to clear) */
+    _updateClearButton() {
+        this.clearButton.disabled = this.input.value === '';
+    }
+
     /* Redraw an open calendar after the holidays changed (holiday.csv arrived), keeping the focused day focused.
        A closed or destroyed picker does nothing: the calendar is drawn again when it opens. */
     refreshHolidays() {
@@ -606,6 +612,7 @@ export class PickerCore {
         if (mode === 'time') {
             if (this.selectedHour !== null && this.selectedMinute !== null) {
                 this.input.value = `${this.selectedHour}:${this.selectedMinute}`;
+                this._updateClearButton();
                 this.input.dispatchEvent(new Event('change', { bubbles: true }));
             }
             return;
@@ -618,6 +625,7 @@ export class PickerCore {
                 : '';
             // the format applies to the date part; the time is appended as " HH:mm"
             this.input.value = `${formatDate(this.selectedDate, this.config.format)}${timePart}`;
+            this._updateClearButton();
             this.input.dispatchEvent(new Event('change', { bubbles: true }));
             return;
         }
@@ -625,6 +633,7 @@ export class PickerCore {
         // date mode
         if (!this.selectedDate) return;
         this.input.value = formatDate(this.selectedDate, this.config.format);
+        this._updateClearButton();
         this.input.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
