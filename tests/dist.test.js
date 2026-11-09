@@ -128,3 +128,41 @@ for (const name of ['datepicker', 'datetimepicker']) {
         }
     });
 }
+
+/* DP-0011: the two calendar bundles on one page, each with its own copy of the core code */
+
+async function addScript(page, src) {
+    const script = page.window.document.createElement('script');
+    const loaded = new Promise((resolve) => script.addEventListener('load', resolve));
+    script.src = src;
+    page.window.document.body.appendChild(script);
+    await loaded;
+    await settle();
+}
+
+test('dist: datepicker.js and datetimepicker.js together give a wrapper one picker, also across later loads', async () => {
+    const page = await loadPage('<body><div class="date-picker-wrapper" id="w"><input class="date-input"></div>'
+        + '<script src="/dist/datepicker.js"></script><script src="/dist/datetimepicker.js"></script></body>');
+    try {
+        const { window } = page;
+        const w = window.document.getElementById('w');
+        const count = () => w.querySelectorAll('.date-picker').length;
+        const all = () => [...window.DatePicker.DatePicker.instances, ...window.DateTimePicker.DateTimePicker.instances];
+        assert.equal(count(), 1, 'one picker although both bundles auto-initialize');
+        for (const p of all()) p.destroy();
+        assert.equal(count(), 0);
+
+        // two pickers by hand from the two bundles; destroying one keeps the wrapper taken
+        const a = new window.DatePicker.DatePicker(w);
+        const b = new window.DateTimePicker.DateTimePicker(w);
+        b.destroy();
+        await addScript(page, '/late/datetimepicker.js'); // a fresh copy of the bundle auto-initializes
+        assert.equal(count(), 1, 'the later bundle skips the wrapper that still has a picker');
+
+        a.destroy();
+        await addScript(page, '/later/datepicker.js');
+        assert.equal(count(), 1, 'once all are destroyed, a later bundle takes the wrapper');
+    } finally {
+        page.close();
+    }
+});
