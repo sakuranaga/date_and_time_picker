@@ -107,15 +107,14 @@ export class TimePicker {
         this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
 
         // Hour selection
+        // (the popup's click handler stops the propagation, and also brings the focus back after a click on padding)
         this.hourColumn.addEventListener('click', (e) => {
-            e.stopPropagation();
             const hour = this.timeColumns.itemValue(e.target, 'hour');
             if (hour !== null) this.selectHour(hour);
         });
 
         // Minute selection
         this.minuteColumn.addEventListener('click', (e) => {
-            e.stopPropagation();
             const minute = this.timeColumns.itemValue(e.target, 'minute');
             if (minute !== null) this.selectMinute(minute);
         });

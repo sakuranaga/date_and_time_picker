@@ -191,3 +191,27 @@ test('TimePicker: after destroy, focus changes do nothing', async (t) => {
     p.input.focus();
     assert.equal(p.mod.TimePicker.instances.length, 0);
 });
+
+test('TimePicker: a click on the padding of a column also keeps the focus in the popup, so Escape works', async (t) => {
+    const p = await start(t, 'TimePicker');
+    p.input.click();
+    active().blur();
+    p.root().querySelector('.tp-hour-column').click();
+    assert.ok(p.root().contains(active()));
+    press('Escape');
+    assert.ok(!p.open());
+    assert.equal(active(), p.input);
+});
+
+test('TimePicker: clicking an hour or a minute does not reach the document (the picker stays open)', async (t) => {
+    const p = await start(t, 'TimePicker');
+    let reached = 0;
+    p.document.addEventListener('click', () => { reached += 1; });
+    p.input.click();
+    reached = 0;
+    p.item('hour', '13').click();
+    p.item('minute', '30').click();
+    assert.equal(reached, 0);
+    assert.ok(p.open());
+    assert.equal(p.input.value, '13:30');
+});
