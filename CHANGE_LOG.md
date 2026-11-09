@@ -2,6 +2,12 @@
 
 ## 2026-11-09
 
+### DP-0009 TimePicker.destroy() がイベントリスナーと overlay を外さない
+
+- `TimePicker.destroy()` で、input（click・keydown）と document（click・focusin）のリスナーを外すようにした。
+  開いていれば閉じる。最後の TimePicker を破棄したときは共有の overlay も削除する（新しい TimePicker を作るとまた作られる）。
+- 今までは破棄後も入力欄のキー操作で overlay が表示され、ページが操作できなくなることがあった。
+
 ### DP-0008 時刻の列のキーボード操作
 
 - 時・分の列をキーボードで操作できるようにした（DateTimePicker の time / datetime、TimePicker）。↑↓ で前後の時刻（移るとすぐ値が変わる）、

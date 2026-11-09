@@ -98,13 +98,14 @@ export class TimePicker {
     }
 
     setupEventListeners() {
-        // Input interactions
-        this.input.addEventListener('click', (e) => {
+        // Input interactions (kept so that destroy() can remove them)
+        this._onInputClick = (e) => {
             e.stopPropagation();
             this.openPicker();
-        });
-
-        this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
+        };
+        this._onInputKeydown = (e) => this.handleKeydown(e);
+        this.input.addEventListener('click', this._onInputClick);
+        this.input.addEventListener('keydown', this._onInputKeydown);
 
         // Hour selection
         // (the popup's click handler stops the propagation, and also brings the focus back after a click on padding)
@@ -162,15 +163,16 @@ export class TimePicker {
         };
         document.addEventListener('focusin', this._onDocumentFocusIn);
 
-        // Close on outside click (delegated to document)
-        document.addEventListener('click', (e) => {
+        // Close on outside click (delegated to document; kept so that destroy() can remove it)
+        this._onDocumentClick = (e) => {
             if (this.isOpen && !this.justOpened && !this.wrapper.contains(e.target)) {
                 this.closePicker();
             }
             if (this.justOpened) {
                 this.justOpened = false;
             }
-        });
+        };
+        document.addEventListener('click', this._onDocumentClick);
     }
 
     handleKeydown(e) {
@@ -310,11 +312,24 @@ export class TimePicker {
     }
 
     destroy() {
+        // close first if open (hides the overlay); a closed picker leaves another open picker's overlay as is
+        if (this.isOpen) this.closePicker();
+
+        document.removeEventListener('click', this._onDocumentClick);
         document.removeEventListener('focusin', this._onDocumentFocusIn);
+        this.input.removeEventListener('click', this._onInputClick);
+        this.input.removeEventListener('keydown', this._onInputKeydown);
+
         if (this.popup && this.popup.parentNode) {
             this.popup.parentNode.removeChild(this.popup);
         }
         TimePicker.instances = TimePicker.instances.filter(i => i !== this);
+
+        // the shared overlay goes with the last picker (a new picker creates it again)
+        if (TimePicker.instances.length === 0) {
+            const overlay = document.getElementById('tp-global-overlay');
+            if (overlay) overlay.remove();
+        }
     }
 
     static closeAllPickers(except = null) {
