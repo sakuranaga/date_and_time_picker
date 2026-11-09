@@ -16,7 +16,6 @@ test('minuteValues lists the minutes of a step below 60', () => {
     assert.equal(minuteValues(5)[11], '55');
 });
 
-// Only cases without an hour carry: rounding up past :59 is DP-0002
 test('nearestTime rounds the minute to the step (no hour carry)', () => {
     assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 0), 30), { hour: '10', minute: '00' });
     assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 10), 30), { hour: '10', minute: '00' });
@@ -43,4 +42,37 @@ test('splitTimeValue splits on the colon as TimePicker does', () => {
     assert.deepEqual(splitTimeValue('8:5'), ['8', '5']);
     assert.deepEqual(splitTimeValue('08:30:00'), ['08', '30', '00']);
     assert.deepEqual(splitTimeValue('abc'), ['abc']);
+});
+
+// DP-0002: rounding up past :59 carries into the hour (and past 23:59 into 00)
+test('nearestTime carries into the next hour when the minute rounds up to 60', () => {
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 50), 30), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 45), 30), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 53), 15), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 52), 15), { hour: '10', minute: '45' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 9, 59), 5), { hour: '10', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 9, 59), 1), { hour: '09', minute: '59' });
+});
+
+test('nearestTime wraps 23:xx rounding up to 00:00', () => {
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 23, 50), 30), { hour: '00', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 23, 44), 30), { hour: '23', minute: '30' });
+});
+
+test('nearestTime always gives a minute that is one of minuteValues(step)', () => {
+    for (const step of [1, 5, 7, 9, 10, 15, 17, 20, 30]) {
+        const values = minuteValues(step);
+        for (let m = 0; m < 60; m++) {
+            const { minute } = nearestTime(new Date(2026, 0, 15, 10, m), step);
+            assert.ok(values.includes(minute), `step ${step}, minute ${m} -> ${minute}`);
+        }
+    }
+});
+
+test('nearestTime with a step that does not divide 60 stays on the step grid and carries only past :59', () => {
+    // 59 / 9 rounds to 7, 7 * 9 = 63 >= 60: carries
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 9), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 23, 59), 9), { hour: '00', minute: '00' });
+    // 59 / 7 rounds to 8, 8 * 7 = 56: no carry
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 7), { hour: '10', minute: '56' });
 });
