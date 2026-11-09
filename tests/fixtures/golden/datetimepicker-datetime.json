@@ -53,7 +53,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "body",
+    "focus": "button.calendar-day.selected|20",
     "timeouts": [],
     "instances": 1,
     "dom": [
@@ -74,7 +74,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "body",
+    "focus": "button.calendar-day.selected|20",
     "timeouts": [],
     "instances": 1,
     "dom": [
@@ -95,7 +95,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "body",
+    "focus": "button.calendar-day.selected|20",
     "timeouts": [],
     "instances": 1,
     "dom": [
@@ -217,7 +217,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "body",
+    "focus": "button.calendar-day.selected|14",
     "timeouts": [],
     "instances": 1,
     "dom": [

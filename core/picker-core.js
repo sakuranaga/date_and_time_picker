@@ -500,8 +500,11 @@ export class PickerCore {
                     // date mode: close on click
                     this.hide();
                     this.input.focus();
+                } else {
+                    // datetime mode: keep open so user can also pick time. The calendar was rebuilt, so put the
+                    // focus back on the picked day (otherwise it falls to <body> and Escape / Tab stop working)
+                    this._focusDate(date);
                 }
-                // datetime mode: keep open so user can also pick time
             });
         }
 
