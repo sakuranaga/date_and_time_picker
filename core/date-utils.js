@@ -70,6 +70,34 @@ export function datePattern(format) {
         .replace('DD', '(\\d{2})');
 }
 
+const DATE_TOKENS = ['YYYY', 'MM', 'DD'];
+
+/** True when the format has all of YYYY, MM and DD, so that a formatted date can be read back. */
+export function isReadableFormat(format) {
+    return DATE_TOKENS.every(token => format.includes(token));
+}
+
+/**
+ * Reads a date written by formatDate(date, format): a Date at 00:00, or null when the text has another shape,
+ * the date does not exist (2026/02/31) or the format lacks one of YYYY / MM / DD.
+ */
+export function parseFormattedDate(text, format) {
+    if (!isReadableFormat(format)) return null;
+    const match = new RegExp(`^${datePattern(format)}$`).exec(text);
+    if (!match) return null;
+    // the groups come in the order of the tokens in the format
+    const order = [...DATE_TOKENS].sort((a, b) => format.indexOf(a) - format.indexOf(b));
+    const parts = {};
+    order.forEach((token, i) => { parts[token] = parseInt(match[i + 1], 10); });
+    // setFullYear, not new Date(y, ...), which would turn years 0-99 into 1900-1999
+    const date = new Date(2000, 0, 1);
+    date.setFullYear(parts.YYYY, parts.MM - 1, parts.DD);
+    if (date.getFullYear() !== parts.YYYY || date.getMonth() !== parts.MM - 1 || date.getDate() !== parts.DD) {
+        return null;
+    }
+    return date;
+}
+
 /** The 42 cells (6 weeks from Sunday) shown for a month: [{ date, otherMonth }]. */
 export function buildMonthCells(year, month) {
     const cells = [];

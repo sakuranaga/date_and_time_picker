@@ -5,6 +5,7 @@
 
 import {
     parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells, keyTargetDate,
+    parseFormattedDate, isReadableFormat,
 } from './date-utils.js';
 import { nearestTime, matchTimeValue, matchDateTimeTime, normalizeMinuteStep } from './time-utils.js';
 import { TimeColumns } from './time-columns.js';
@@ -70,6 +71,35 @@ export class PickerCore {
     init() {
         this.createPicker();
         this.attachEventListeners();
+        // an initial value of the input (value attribute or set by a script) becomes the selection
+        this._syncFromInput();
+    }
+
+    /* The date in the input's value: "<date in format>" or, in datetime mode, also "<date in format> HH:mm" */
+    _dateFromInput() {
+        const value = this.input.value;
+        const format = this.config.format;
+        const dateOnly = parseFormattedDate(value, format);
+        if (dateOnly || this.config.mode !== 'datetime') return dateOnly;
+        const withTime = /^(.*) \d{2}:\d{2}$/.exec(value);
+        return withTime ? parseFormattedDate(withTime[1], format) : null;
+    }
+
+    /* Make the selection follow the input's value (date / datetime). Nothing changes when the value is the selected
+       day; an unreadable value clears the selection without touching the value. Formats that cannot be read back
+       (without YYYY, MM or DD) are left alone. */
+    _syncFromInput() {
+        const mode = this.config.mode;
+        if ((mode !== 'date' && mode !== 'datetime') || !isReadableFormat(this.config.format)) return;
+        const date = this._dateFromInput();
+        if (date) {
+            if (!this.selectedDate || !this.isSameDay(date, this.selectedDate)) {
+                this.selectedDate = date;
+                this.viewDate = new Date(date);
+            }
+        } else if (this.selectedDate) {
+            this.selectedDate = null;
+        }
     }
 
     /* Create Picker DOM based on mode */
@@ -361,6 +391,9 @@ export class PickerCore {
         this._registry.instances.forEach(instance => {
             if (instance !== this) instance.closePicker();
         });
+
+        /* The value may have been set or changed by a script since the last time */
+        this._syncFromInput();
 
         if (mode === 'date' || mode === 'datetime') {
             this.updateCalendar();

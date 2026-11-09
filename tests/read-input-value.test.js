@@ -157,3 +157,13 @@ test('DateTimePicker (datetime): an unreadable value selects no date and is left
     assert.equal(changes(), 0);
     assert.equal(currentDays(wrapper).length, 31, 'today\'s month is shown');
 });
+
+test('a format without one of YYYY / MM / DD is not read back, so the picked day stays selected', async (t) => {
+    const { wrapper, input, instance } = await start(t, 'datepicker', 'data-format="YYYY/MM"', '2025/12');
+    assert.equal(instance.selectedDate, null, 'such a value cannot be read');
+    input.click();
+    currentDay(wrapper, 20).click();
+    assert.equal(input.value, '2026/01');
+    input.click();
+    assert.ok(currentDay(wrapper, 20).classList.contains('selected'), 'the selection is kept on reopening');
+});
