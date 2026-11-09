@@ -62,6 +62,9 @@ test('DateTimePicker (datetime): picking a day of another month shows that month
 test('DateTimePicker (datetime): Tab stays inside the picker after a date was picked (focus trap)', async (t) => {
     const { wrapper, picker } = await open(t);
     currentDay(wrapper, 20).click();
+    // the focus is still inside the picker after the pick (it fell to <body> before the fix)
+    assert.equal(active(), currentDay(wrapper, 20));
+    assert.ok(picker.contains(active()));
     const focusable = [...picker.querySelectorAll('button:not([disabled]):not([tabindex="-1"])')];
     const last = focusable[focusable.length - 1];
     last.focus();
