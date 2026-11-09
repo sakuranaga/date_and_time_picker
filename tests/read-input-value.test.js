@@ -167,3 +167,18 @@ test('a format without one of YYYY / MM / DD is not read back, so the picked day
     input.click();
     assert.ok(currentDay(wrapper, 20).classList.contains('selected'), 'the selection is kept on reopening');
 });
+
+test('a value in the year 99 is shown, navigated and picked in the year 99 (not 1999)', async (t) => {
+    const { wrapper, input } = await start(t, 'datepicker', '', '99/05/06');
+    input.click();
+    assert.equal(display(wrapper), '99年5月');
+    assert.ok(currentDay(wrapper, 6).classList.contains('selected'));
+    key(env.document.activeElement, 'ArrowRight');
+    assert.equal(env.document.activeElement, currentDay(wrapper, 7));
+    key(env.document.activeElement, 'PageDown');
+    assert.equal(display(wrapper), '99年6月');
+    next(wrapper);
+    assert.equal(display(wrapper), '99年7月');
+    currentDay(wrapper, 10).click();
+    assert.equal(input.value, '99/07/10');
+});

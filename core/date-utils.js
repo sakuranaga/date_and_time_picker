@@ -2,6 +2,16 @@
    core/date-utils.js : pure date helpers shared by the pickers
 ---------------------------------------------------------- */
 
+/**
+ * A Date at 00:00 of year / month (0-based) / day. Unlike new Date(y, m, d), years 0-99 stay as they are
+ * (not 1900-1999); months and days out of range roll over as usual.
+ */
+export function makeDate(year, month, day) {
+    const date = new Date(2000, 0, 1);
+    date.setFullYear(year, month, day);
+    return date;
+}
+
 /** A new Date at 00:00:00.000 of the same day. */
 export function startOfDay(date) {
     const d = new Date(date);
@@ -89,9 +99,7 @@ export function parseFormattedDate(text, format) {
     const order = [...DATE_TOKENS].sort((a, b) => format.indexOf(a) - format.indexOf(b));
     const parts = {};
     order.forEach((token, i) => { parts[token] = parseInt(match[i + 1], 10); });
-    // setFullYear, not new Date(y, ...), which would turn years 0-99 into 1900-1999
-    const date = new Date(2000, 0, 1);
-    date.setFullYear(parts.YYYY, parts.MM - 1, parts.DD);
+    const date = makeDate(parts.YYYY, parts.MM - 1, parts.DD);
     if (date.getFullYear() !== parts.YYYY || date.getMonth() !== parts.MM - 1 || date.getDate() !== parts.DD) {
         return null;
     }
@@ -101,42 +109,43 @@ export function parseFormattedDate(text, format) {
 /** The 42 cells (6 weeks from Sunday) shown for a month: [{ date, otherMonth }]. */
 export function buildMonthCells(year, month) {
     const cells = [];
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const prevLastDay = new Date(year, month, 0);
+    const firstDay = makeDate(year, month, 1);
+    const lastDay = makeDate(year, month + 1, 0);
+    const prevLastDay = makeDate(year, month, 0);
     const startWeekday = firstDay.getDay();
 
     /* Previous Month Days */
     for (let i = startWeekday - 1; i >= 0; i--) {
         const day = prevLastDay.getDate() - i;
-        cells.push({ date: new Date(year, month - 1, day), otherMonth: true });
+        cells.push({ date: makeDate(year, month - 1, day), otherMonth: true });
     }
 
     /* Current Month Days */
     for (let day = 1; day <= lastDay.getDate(); day++) {
-        cells.push({ date: new Date(year, month, day), otherMonth: false });
+        cells.push({ date: makeDate(year, month, day), otherMonth: false });
     }
 
     /* Next Month Days */
     const filled = startWeekday + lastDay.getDate();
     const remain = 42 - filled;
     for (let day = 1; day <= remain; day++) {
-        cells.push({ date: new Date(year, month + 1, day), otherMonth: true });
+        cells.push({ date: makeDate(year, month + 1, day), otherMonth: true });
     }
     return cells;
 }
 
 /** A new Date `n` days after `date` (negative goes back), at the same time of day. */
 export function addDays(date, n) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n,
-        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    const result = makeDate(date.getFullYear(), date.getMonth(), date.getDate() + n);
+    result.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    return result;
 }
 
 /** The same day of the month `n` months later (negative goes back), clamped to the last day of that month. */
 export function addMonthsClamped(date, n) {
-    const first = new Date(date.getFullYear(), date.getMonth() + n, 1);
-    const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
-    return new Date(first.getFullYear(), first.getMonth(), Math.min(date.getDate(), lastDay));
+    const first = makeDate(date.getFullYear(), date.getMonth() + n, 1);
+    const lastDay = makeDate(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+    return makeDate(first.getFullYear(), first.getMonth(), Math.min(date.getDate(), lastDay));
 }
 
 /**

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     parseDateOption, startOfDay, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells,
-    addDays, addMonthsClamped, keyTargetDate, datePattern, parseFormattedDate,
+    addDays, addMonthsClamped, keyTargetDate, datePattern, parseFormattedDate, makeDate,
 } from '../../core/date-utils.js';
 
 const ymd = (d) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
@@ -175,4 +175,19 @@ test('parseFormattedDate reads back formatDate for years 0, 99, 100 and 10000', 
         assert.ok(back, text);
         assert.deepEqual([back.getFullYear(), back.getMonth(), back.getDate()], [year, 4, 6], text);
     }
+});
+
+test('makeDate keeps years 0-99 and rolls over months and days', () => {
+    assert.deepEqual(ymd(makeDate(99, 4, 6)), [99, 5, 6]);
+    assert.deepEqual(ymd(makeDate(0, 0, 1)), [0, 1, 1]);
+    assert.deepEqual(ymd(makeDate(99, 12, 1)), [100, 1, 1]);
+    assert.deepEqual(ymd(makeDate(2026, 0, 0)), [2025, 12, 31]);
+    assert.equal(makeDate(2026, 0, 15).getHours(), 0);
+});
+
+test('the calendar helpers keep years below 100', () => {
+    const cells = buildMonthCells(99, 4);
+    assert.ok(cells.every((c) => c.date.getFullYear() === 99));
+    assert.deepEqual(ymd(addDays(makeDate(99, 11, 31), 1)), [100, 1, 1]);
+    assert.deepEqual(ymd(addMonthsClamped(makeDate(99, 0, 31), 1)), [99, 2, 28]);
 });

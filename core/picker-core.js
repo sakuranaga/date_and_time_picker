@@ -5,7 +5,7 @@
 
 import {
     parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells, keyTargetDate,
-    parseFormattedDate, isReadableFormat,
+    parseFormattedDate, isReadableFormat, makeDate,
 } from './date-utils.js';
 import { nearestTime, matchTimeValue, matchDateTimeTime, normalizeMinuteStep } from './time-utils.js';
 import { TimeColumns } from './time-columns.js';
@@ -269,12 +269,12 @@ export class PickerCore {
             /* Month Navigation */
             this.prevButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
+                this.viewDate = makeDate(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
                 this.updateCalendar();
             });
             this.nextButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
+                this.viewDate = makeDate(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
                 this.updateCalendar();
             });
 
@@ -366,7 +366,7 @@ export class PickerCore {
     /* Focus the button of `date`, switching the displayed month first when needed */
     _focusDate(date) {
         if (date.getFullYear() !== this.viewDate.getFullYear() || date.getMonth() !== this.viewDate.getMonth()) {
-            this.viewDate = new Date(date.getFullYear(), date.getMonth(), 1);
+            this.viewDate = makeDate(date.getFullYear(), date.getMonth(), 1);
             this.updateCalendar();
         }
         const button = Array.from(this.calendarGrid.querySelectorAll('.calendar-day:not(.other-month)'))
