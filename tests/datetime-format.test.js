@@ -68,7 +68,8 @@ for (const [format, dateOnly, withTime] of [
         // not 01:30 from the date: no time in the value, so the current time is preselected
         assert.equal(hour(picker), '10');
         assert.equal(minute(picker), '00');
-        assert.equal(input.value, dateOnly, 'no date is picked yet, so nothing is written');
+        // since DP-0007 the date (2026-01-30) is read, so opening writes it with the preselected time
+        assert.equal(input.value, `${dateOnly} 10:00`);
         key(picker, 'Escape');
 
         input.value = withTime;
