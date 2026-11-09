@@ -71,7 +71,8 @@ export class TimePicker {
         this.popup.className = 'tp-popup';
         this.popup.id = this.uniqueId;
         this.popup.setAttribute('role', 'dialog');
-        this.popup.setAttribute('aria-modal', 'true');
+        // non-modal: Tab can leave it (it then closes); focusable so that a click on its padding keeps the focus inside
+        this.popup.setAttribute('tabindex', '-1');
         this.popup.setAttribute('aria-label', 'Time Picker');
 
         this.popup.innerHTML = `
@@ -106,15 +107,14 @@ export class TimePicker {
         this.input.addEventListener('keydown', (e) => this.handleKeydown(e));
 
         // Hour selection
+        // (the popup's click handler stops the propagation, and also brings the focus back after a click on padding)
         this.hourColumn.addEventListener('click', (e) => {
-            e.stopPropagation();
             const hour = this.timeColumns.itemValue(e.target, 'hour');
             if (hour !== null) this.selectHour(hour);
         });
 
         // Minute selection
         this.minuteColumn.addEventListener('click', (e) => {
-            e.stopPropagation();
             const minute = this.timeColumns.itemValue(e.target, 'minute');
             if (minute !== null) this.selectMinute(minute);
         });
@@ -125,10 +125,42 @@ export class TimePicker {
             this._clear();
         });
 
-        // Prevent closing when clicking inside popup
+        // Keyboard in the columns: ↑ ↓ Home End select at once, ← → switch columns
+        const onColumnKeydown = (e) => {
+            this.timeColumns.handleKeydown(e, (kind, value) => {
+                if (kind === 'hour') this.selectHour(value);
+                else this.selectMinute(value);
+            });
+        };
+        this.hourColumn.addEventListener('keydown', onColumnKeydown);
+        this.minuteColumn.addEventListener('keydown', onColumnKeydown);
+
+        // Escape anywhere in the popup, and Enter on an item or the popup itself, close it and return to the input
+        this.popup.addEventListener('keydown', (e) => {
+            const onItemOrPopup = e.target === this.popup || e.target.classList.contains('tp-item');
+            if (e.key === 'Escape' || (e.key === 'Enter' && onItemOrPopup)) {
+                e.preventDefault();
+                this.closePicker();
+                this.input.focus();
+            }
+        });
+
+        // Prevent closing when clicking inside popup; a click on its padding keeps the focus in the popup
         this.popup.addEventListener('click', (e) => {
             e.stopPropagation();
+            if (this.isOpen && !this.popup.contains(document.activeElement)) {
+                this.popup.focus({ preventScroll: true });
+            }
         });
+
+        // Close when the focus goes to an element outside the popup (Tab out, Shift+Tab back to the input...).
+        // Leaving the document (another window, the browser UI) fires no focusin here, so it stays open.
+        this._onDocumentFocusIn = (e) => {
+            if (this.isOpen && !this.popup.contains(e.target)) {
+                this.closePicker();
+            }
+        };
+        document.addEventListener('focusin', this._onDocumentFocusIn);
 
         // Close on outside click (delegated to document)
         document.addEventListener('click', (e) => {
@@ -245,6 +277,9 @@ export class TimePicker {
                 this.scrollToSelection(this.minuteColumn);
             }, 10);
         }
+
+        // Move focus into the popup: the selected hour
+        this.timeColumns.focusItem('hour');
     }
 
     scrollToItem(container, value) {
@@ -275,6 +310,7 @@ export class TimePicker {
     }
 
     destroy() {
+        document.removeEventListener('focusin', this._onDocumentFocusIn);
         if (this.popup && this.popup.parentNode) {
             this.popup.parentNode.removeChild(this.popup);
         }

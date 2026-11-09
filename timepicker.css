@@ -71,6 +71,11 @@
     display: block;
 }
 
+/* the popup itself takes the focus only to keep it inside after a click on its padding */
+.tp-popup:focus {
+    outline: none;
+}
+
 /* Controls (clear button) */
 .tp-controls {
     display: flex;
