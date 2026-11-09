@@ -65,10 +65,15 @@ test('DateTimePicker (datetime): Tab stays inside the picker after a date was pi
     // the focus is still inside the picker after the pick (it fell to <body> before the fix)
     assert.equal(active(), currentDay(wrapper, 20));
     assert.ok(picker.contains(active()));
-    const focusable = [...picker.querySelectorAll('button:not([disabled]):not([tabindex="-1"])')];
+    // since DP-0008 the trap also includes the tabbable hour / minute items (the minute item is the last)
+    const focusable = [...picker.querySelectorAll('button:not([disabled]):not([tabindex="-1"]), [role="option"][tabindex="0"]')];
     const last = focusable[focusable.length - 1];
+    assert.ok(last.classList.contains('dp-minute-item'));
     last.focus();
     const event = key(last, 'Tab');
-    assert.ok(event.defaultPrevented, 'the trap handles Tab on the last button');
+    assert.ok(event.defaultPrevented, 'the trap handles Tab on the last item');
     assert.equal(active(), focusable[0]);
+    const back = key(focusable[0], 'Tab', { shiftKey: true });
+    assert.ok(back.defaultPrevented);
+    assert.equal(active(), last);
 });
