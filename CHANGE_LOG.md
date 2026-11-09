@@ -2,6 +2,12 @@
 
 ## 2026-11-09
 
+### DP-0014 timepicker.js の未使用コード削除と setValue() の表示更新
+
+- `TimePicker.setValue()` が、時・分の列の選択表示（`selected`・`aria-selected`・Tab で止まる項目）も更新するようにした。
+  今までどおり change は発火せず、ピッカーも開かない。
+- 使われていなかった `TimePicker.prototype.scrollToItem()` と、`config.format`（既定値 `'HH:mm'`。どこからも参照されていなかった）を削除した。
+
 ### DP-0013 datetime モードでクリアボタンの有効・無効が実際の状態とずれる
 
 - クリアボタンは「入力欄に値があるときだけ有効」とし、値を書き込むたび・クリアのたび・開くたびに更新するようにした（全モード共通）。
