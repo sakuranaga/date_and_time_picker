@@ -55,19 +55,19 @@ for (const [moduleName, label, attrs] of [
         assert.equal(changes(), 0);
     });
 
-    test(`${label}: the value is read with data-format, and another shape is not read`, async (t) => {
-        const ok = await start(t, moduleName, `${attrs} data-format="YYYY-MM-DD"`, '2025-12-01');
-        ok.input.click();
-        assert.equal(display(ok.wrapper), '2025年12月');
-        assert.ok(currentDay(ok.wrapper, 1).classList.contains('selected'));
-        env.cleanup();
-        env = null;
+    test(`${label}: the value is read with data-format`, async (t) => {
+        const { wrapper, input } = await start(t, moduleName, `${attrs} data-format="YYYY-MM-DD"`, '2025-12-01');
+        input.click();
+        assert.equal(display(wrapper), '2025年12月');
+        assert.ok(currentDay(wrapper, 1).classList.contains('selected'));
+    });
 
-        const other = await start(t, moduleName, `${attrs} data-format="YYYY-MM-DD"`, '2025/12/01');
-        other.input.click();
-        assert.equal(display(other.wrapper), '2026年1月');
-        assert.equal(selectedDays(other.wrapper).length, 0);
-        assert.equal(other.input.value, '2025/12/01');
+    test(`${label}: a value in another shape than data-format is not read`, async (t) => {
+        const { wrapper, input } = await start(t, moduleName, `${attrs} data-format="YYYY-MM-DD"`, '2025/12/01');
+        input.click();
+        assert.equal(display(wrapper), '2026年1月');
+        assert.equal(selectedDays(wrapper).length, 0);
+        assert.equal(input.value, '2025/12/01');
     });
 
     for (const bad of ['abc', '2026/02/31', '2026/1/5', '2026/01/05 10:00']) {
