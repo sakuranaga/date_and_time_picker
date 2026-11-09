@@ -69,10 +69,10 @@ test('nearestTime always gives a minute that is one of minuteValues(step)', () =
     }
 });
 
-test('nearestTime with a step that does not divide 60 stays on the step grid and carries only past :59', () => {
-    // 59 / 9 rounds to 7, 7 * 9 = 63 >= 60: carries
+// Since DP-0005 a step that does not divide 60 is replaced by 30 (it used to round on its own grid)
+test('nearestTime with a step that does not divide 60 rounds with the default 30', () => {
     assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 9), { hour: '11', minute: '00' });
     assert.deepEqual(nearestTime(new Date(2026, 0, 15, 23, 59), 9), { hour: '00', minute: '00' });
-    // 59 / 7 rounds to 8, 8 * 7 = 56: no carry
-    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 7), { hour: '10', minute: '56' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 59), 7), { hour: '11', minute: '00' });
+    assert.deepEqual(nearestTime(new Date(2026, 0, 15, 10, 44), 7), { hour: '10', minute: '30' });
 });

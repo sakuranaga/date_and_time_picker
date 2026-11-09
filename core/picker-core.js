@@ -6,7 +6,7 @@
 import {
     parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells, keyTargetDate,
 } from './date-utils.js';
-import { nearestTime, matchTimeValue } from './time-utils.js';
+import { nearestTime, matchTimeValue, normalizeMinuteStep } from './time-utils.js';
 import { TimeColumns } from './time-columns.js';
 
 const TIME_CLASSES = { item: 'dp-time-item', hourItem: 'dp-hour-item', minuteItem: 'dp-minute-item' };
@@ -34,6 +34,8 @@ export class PickerCore {
             maxDate: null,
             ...options
         };
+        // an invalid step (0, negative, not a divisor of 60...) falls back to 30
+        this.config.minuteStep = normalizeMinuteStep(this.config.minuteStep);
 
         // Parse minDate/maxDate
         this.minDate = this.parseDate(this.config.minDate);
