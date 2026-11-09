@@ -320,6 +320,24 @@ export class PickerCore {
 
         /* Time column click events (time / datetime) */
         if (mode === 'time' || mode === 'datetime') {
+            /* Keyboard in the columns: ↑ ↓ Home End select at once, ← → switch columns, Enter closes */
+            const onColumnKeydown = (e) => {
+                const onItem = this.timeColumns.itemValue(e.target, 'hour') !== null
+                    || this.timeColumns.itemValue(e.target, 'minute') !== null;
+                if (e.key === 'Enter' && onItem) {
+                    e.preventDefault();
+                    this.hide();
+                    this.input.focus();
+                    return;
+                }
+                this.timeColumns.handleKeydown(e, (kind, value) => {
+                    if (kind === 'hour') this.selectHour(value);
+                    else this.selectMinute(value);
+                });
+            };
+            this.hourColumn.addEventListener('keydown', onColumnKeydown);
+            this.minuteColumn.addEventListener('keydown', onColumnKeydown);
+
             this.hourColumn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const hour = this.timeColumns.itemValue(e.target, 'hour');
@@ -348,7 +366,7 @@ export class PickerCore {
         this.picker.addEventListener('keydown', (e) => {
             if (e.key !== 'Tab') return;
             const focusable = this.picker.querySelectorAll(
-                'button:not([disabled]):not([tabindex="-1"])'
+                'button:not([disabled]):not([tabindex="-1"]), [role="option"][tabindex="0"]'
             );
             if (focusable.length === 0) return;
             const first = focusable[0];
@@ -408,6 +426,8 @@ export class PickerCore {
         }
         if (mode === 'time') {
             this.clearButton.disabled = this.selectedHour === null;
+            /* Move focus into the picker: the selected hour */
+            this.timeColumns.focusItem('hour');
         }
 
         /* Move focus into the picker */

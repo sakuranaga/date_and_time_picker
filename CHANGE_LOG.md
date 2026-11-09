@@ -2,6 +2,16 @@
 
 ## 2026-11-09
 
+### DP-0008 時刻の列のキーボード操作
+
+- 時・分の列をキーボードで操作できるようにした（DateTimePicker の time / datetime、TimePicker）。↑↓ で前後の時刻（移るとすぐ値が変わる）、
+  Home / End で先頭・末尾、→ / ← で時と分の列の切り替え、Enter / Esc で閉じて入力欄に戻る。
+- 各列で選択中の項目だけを Tab で止まれるようにした（roving tabindex）。time モードと TimePicker は、開くと選択中の「時」にフォーカスが移る。
+  datetime ではフォーカストラップの対象に時・分が入り、カレンダー → 時 → 分と Tab で移動できる。
+- TimePicker は、ポップアップの外の要素にフォーカスが移ると閉じる（Tab で外へ、Shift+Tab で入力欄へ）。ウィンドウの切り替えなどで
+  フォーカスが文書の外に出るだけでは閉じない。ポップアップを非モーダル（`aria-modal` なし）にし、`tabindex="-1"` を付けた。
+- 設計書: `docs/20261109-0942-time-keyboard.md`
+
 ### DP-0007 入力済みの値の読み込み
 
 - DatePicker と DateTimePicker（date / datetime）が、生成時と開くときに input の値を読み、format どおりの日付ならその日を選択状態にして、
