@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     parseDateOption, startOfDay, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells,
-    addDays, addMonthsClamped, keyTargetDate, datePattern,
+    addDays, addMonthsClamped, keyTargetDate, datePattern, parseFormattedDate, makeDate,
 } from '../../core/date-utils.js';
 
 const ymd = (d) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
@@ -141,4 +141,57 @@ test('datePattern turns the first YYYY / MM / DD into groups and escapes everyth
     for (const format of ['YYYY/MM/DD', 'YYYY-MM-DD', 'DD.MM.YYYY', 'YYYY年MM月DD日', 'YYYY MM:DD']) {
         assert.ok(new RegExp(`^${datePattern(format)}$`).test(formatDate(new Date(2026, 0, 5), format)), format);
     }
+});
+
+test('parseFormattedDate reads a date written in the format (local 00:00), in any token order', () => {
+    const d = parseFormattedDate('2026/01/05', 'YYYY/MM/DD');
+    assert.deepEqual(ymd(d), [2026, 1, 5]);
+    assert.equal(d.getHours() + d.getMinutes() + d.getSeconds() + d.getMilliseconds(), 0);
+    assert.deepEqual(ymd(parseFormattedDate('05.01.2026', 'DD.MM.YYYY')), [2026, 1, 5]);
+    assert.deepEqual(ymd(parseFormattedDate('01/05/2026', 'MM/DD/YYYY')), [2026, 1, 5]);
+    assert.deepEqual(ymd(parseFormattedDate('2026年01月05日', 'YYYY年MM月DD日')), [2026, 1, 5]);
+    assert.deepEqual(ymd(parseFormattedDate('2026 01:30', 'YYYY MM:DD')), [2026, 1, 30]);
+});
+
+test('parseFormattedDate rejects other shapes, impossible dates and formats without all three tokens', () => {
+    assert.equal(parseFormattedDate('2026/02/31', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026/13/01', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026/00/10', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026/1/5', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026-01-05', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026/01/05 10:00', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('', 'YYYY/MM/DD'), null);
+    assert.equal(parseFormattedDate('2026/01', 'YYYY/MM'), null);
+    assert.deepEqual(ymd(parseFormattedDate('2028/02/29', 'YYYY/MM/DD')), [2028, 2, 29]);
+    assert.equal(parseFormattedDate('2026/02/29', 'YYYY/MM/DD'), null);
+});
+
+test('parseFormattedDate reads back formatDate for years 0, 99, 100 and 10000', () => {
+    for (const year of [0, 99, 100, 10000]) {
+        const date = new Date(2000, 0, 1);
+        date.setFullYear(year, 4, 6);
+        const text = formatDate(date, 'YYYY/MM/DD');
+        const back = parseFormattedDate(text, 'YYYY/MM/DD');
+        assert.ok(back, text);
+        assert.deepEqual([back.getFullYear(), back.getMonth(), back.getDate()], [year, 4, 6], text);
+    }
+});
+
+test('makeDate keeps years 0-99 and rolls over months and days', () => {
+    assert.deepEqual(ymd(makeDate(99, 4, 6)), [99, 5, 6]);
+    assert.deepEqual(ymd(makeDate(0, 0, 1)), [0, 1, 1]);
+    assert.deepEqual(ymd(makeDate(99, 12, 1)), [100, 1, 1]);
+    assert.deepEqual(ymd(makeDate(2026, 0, 0)), [2025, 12, 31]);
+    assert.equal(makeDate(2026, 0, 15).getHours(), 0);
+});
+
+test('the calendar helpers keep years below 100', () => {
+    const cells = buildMonthCells(99, 4);
+    assert.ok(cells.every((c) => c.date.getFullYear() === 99));
+    assert.deepEqual(ymd(addDays(makeDate(99, 11, 31), 1)), [100, 1, 1]);
+    assert.deepEqual(ymd(addMonthsClamped(makeDate(99, 0, 31), 1)), [99, 2, 28]);
+});
+
+test('parseDateOption keeps years below 100 in YYYY-M-D', () => {
+    assert.deepEqual(ymd(parseDateOption('0099-01-01')), [99, 1, 1]);
 });

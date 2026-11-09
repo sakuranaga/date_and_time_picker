@@ -2,6 +2,16 @@
 
 ## 2026-11-09
 
+### DP-0007 入力済みの値の読み込み
+
+- DatePicker と DateTimePicker（date / datetime）が、生成時と開くときに input の値を読み、format どおりの日付ならその日を選択状態にして、
+  その月を表示するようにした。HTML の `value` 属性で初期値を設定できる。datetime は「日付」と「日付 + HH:mm」の両方を読む。
+- datetime で値が入っていても日付が未選択のままで、時刻を選んでも値が変わらなかった問題が直る（開いたときに日付と時刻で書き直す）。
+- 形が違う値・存在しない日付は読まず、値もそのまま残す。値が選択中の日と同じなら何もしない（月を移動して開き直したときの表示は今までどおり）。
+  YYYY・MM・DD のどれかがない format では読み込まない。
+- README の TODO「初期値設定（data-value 属性）」を、input の value で設定する説明に置き換えた。
+- 設計書: `docs/20261109-0927-read-input-value.md`
+
 ### DP-0006 datetime モードの format と README
 
 - datetime モードで `format`（`data-format`）が日付部分に効くようにした。値は「format の日付 + 半角スペース + HH:mm」

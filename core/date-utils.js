@@ -2,6 +2,16 @@
    core/date-utils.js : pure date helpers shared by the pickers
 ---------------------------------------------------------- */
 
+/**
+ * A Date at 00:00 of year / month (0-based) / day. Unlike new Date(y, m, d), years 0-99 stay as they are
+ * (not 1900-1999); months and days out of range roll over as usual.
+ */
+export function makeDate(year, month, day) {
+    const date = new Date(2000, 0, 1);
+    date.setFullYear(year, month, day);
+    return date;
+}
+
 /** A new Date at 00:00:00.000 of the same day. */
 export function startOfDay(date) {
     const d = new Date(date);
@@ -20,7 +30,7 @@ export function parseDateOption(value, now = new Date()) {
     // Parse YYYY-MM-DD format explicitly to avoid UTC/local timezone ambiguity
     const match = String(value).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
     if (match) {
-        return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+        return makeDate(parseInt(match[1], 10), parseInt(match[2], 10) - 1, parseInt(match[3], 10));
     }
     const parsed = new Date(value);
     return isNaN(parsed) ? null : parsed;
@@ -70,45 +80,72 @@ export function datePattern(format) {
         .replace('DD', '(\\d{2})');
 }
 
+const DATE_TOKENS = ['YYYY', 'MM', 'DD'];
+
+/** True when the format has all of YYYY, MM and DD, so that a formatted date can be read back. */
+export function isReadableFormat(format) {
+    return DATE_TOKENS.every(token => format.includes(token));
+}
+
+/**
+ * Reads a date written by formatDate(date, format): a Date at 00:00, or null when the text has another shape,
+ * the date does not exist (2026/02/31) or the format lacks one of YYYY / MM / DD.
+ */
+export function parseFormattedDate(text, format) {
+    if (!isReadableFormat(format)) return null;
+    const match = new RegExp(`^${datePattern(format)}$`).exec(text);
+    if (!match) return null;
+    // the groups come in the order of the tokens in the format
+    const order = [...DATE_TOKENS].sort((a, b) => format.indexOf(a) - format.indexOf(b));
+    const parts = {};
+    order.forEach((token, i) => { parts[token] = parseInt(match[i + 1], 10); });
+    const date = makeDate(parts.YYYY, parts.MM - 1, parts.DD);
+    if (date.getFullYear() !== parts.YYYY || date.getMonth() !== parts.MM - 1 || date.getDate() !== parts.DD) {
+        return null;
+    }
+    return date;
+}
+
 /** The 42 cells (6 weeks from Sunday) shown for a month: [{ date, otherMonth }]. */
 export function buildMonthCells(year, month) {
     const cells = [];
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const prevLastDay = new Date(year, month, 0);
+    const firstDay = makeDate(year, month, 1);
+    const lastDay = makeDate(year, month + 1, 0);
+    const prevLastDay = makeDate(year, month, 0);
     const startWeekday = firstDay.getDay();
 
     /* Previous Month Days */
     for (let i = startWeekday - 1; i >= 0; i--) {
         const day = prevLastDay.getDate() - i;
-        cells.push({ date: new Date(year, month - 1, day), otherMonth: true });
+        cells.push({ date: makeDate(year, month - 1, day), otherMonth: true });
     }
 
     /* Current Month Days */
     for (let day = 1; day <= lastDay.getDate(); day++) {
-        cells.push({ date: new Date(year, month, day), otherMonth: false });
+        cells.push({ date: makeDate(year, month, day), otherMonth: false });
     }
 
     /* Next Month Days */
     const filled = startWeekday + lastDay.getDate();
     const remain = 42 - filled;
     for (let day = 1; day <= remain; day++) {
-        cells.push({ date: new Date(year, month + 1, day), otherMonth: true });
+        cells.push({ date: makeDate(year, month + 1, day), otherMonth: true });
     }
     return cells;
 }
 
 /** A new Date `n` days after `date` (negative goes back), at the same time of day. */
 export function addDays(date, n) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n,
-        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    const result = makeDate(date.getFullYear(), date.getMonth(), date.getDate() + n);
+    result.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+    return result;
 }
 
 /** The same day of the month `n` months later (negative goes back), clamped to the last day of that month. */
 export function addMonthsClamped(date, n) {
-    const first = new Date(date.getFullYear(), date.getMonth() + n, 1);
-    const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
-    return new Date(first.getFullYear(), first.getMonth(), Math.min(date.getDate(), lastDay));
+    const first = makeDate(date.getFullYear(), date.getMonth() + n, 1);
+    const lastDay = makeDate(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+    return makeDate(first.getFullYear(), first.getMonth(), Math.min(date.getDate(), lastDay));
 }
 
 /**

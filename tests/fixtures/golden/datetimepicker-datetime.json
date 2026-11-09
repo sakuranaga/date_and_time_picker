@@ -250,20 +250,22 @@
     "values": [
       "2026/01/07 08:30"
     ],
-    "changes": [],
+    "changes": [
+      "0=2026/01/07 08:30"
+    ],
     "open": [
       true
     ],
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "button.calendar-day.today|15",
+    "focus": "button.calendar-day.selected|7",
     "timeouts": [
       10
     ],
     "instances": 1,
     "dom": [
-      "287d119b0aaf36de667d3347562b6698b82220a539649cab285babf0129c50ce"
+      "ab841d334576938629e63b2cd9635a242e3556e422a2fb2181185c7a25404685"
     ]
   },
   {
@@ -282,7 +284,7 @@
     "timeouts": [],
     "instances": 1,
     "dom": [
-      "e7e8afcbc895ca0a4c15607b934fe68b089ca4e33666989c0a5a03773f5893a6"
+      "8a4cb5b8b39476fc0dd28cf49e073d5e9b43fe931896b6365e8fcbfe79cdb846"
     ]
   },
   {
@@ -368,28 +370,30 @@
   {
     "step": "open with \"2026/01/07\"",
     "values": [
-      "2026/01/07"
+      "2026/01/07 10:00"
     ],
-    "changes": [],
+    "changes": [
+      "0=2026/01/07 10:00"
+    ],
     "open": [
       true
     ],
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "button.calendar-day.today|15",
+    "focus": "button.calendar-day.selected|7",
     "timeouts": [
       10
     ],
     "instances": 1,
     "dom": [
-      "1164c5170e8f8f6d3de38615704477782b10d77664dfc8599d1118af1988aeed"
+      "5b8a00a8cfe7c137822cd2cae8d60ef5b6afe902e2b387ff25d3de1eef9a9469"
     ]
   },
   {
     "step": "close after \"2026/01/07\"",
     "values": [
-      "2026/01/07"
+      "2026/01/07 10:00"
     ],
     "changes": [],
     "open": [
@@ -402,7 +406,7 @@
     "timeouts": [],
     "instances": 1,
     "dom": [
-      "a83ea095cffcaf9d00d1f9b8e9abbf2388d2fc27eafd3666a54f101592f88f04"
+      "a5d572b54eeaeab1fdefca12b59b3a8c3f52dc984023b3781421d3cd7479ff03"
     ]
   },
   {
