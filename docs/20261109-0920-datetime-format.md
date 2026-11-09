@@ -1,6 +1,6 @@
 # datetime モードの format と DateTimePicker の README（DP-0006）
 
-- ステータス: Reviewed
+- ステータス: Implemented
 - 課題: LAP DP-0006「datetime モードが format を無視し README に DateTimePicker の記載がない」
 - 作成: 2026-11-09
 
@@ -63,6 +63,15 @@
   `tests/fixtures/golden/datetimepicker-datetime.json`（作り直し）
 - 追加: `tests/datetime-format.test.js`
 
+## 実装時の差異
+
+- `matchTimeValue` は time モード専用になったので、引数を値1つにした（`mode` 引数を削除。呼び出し側は time モードだけ）。
+- README には設計の範囲に加えて、DatePicker と DateTimePicker を同じページで読み込まない注意を書いた
+  （両方が `.date-picker-wrapper` を自動初期化するため。この衝突自体は DP-0011 で扱う）。
+- golden: `datetimepicker-datetime` だけ作り直し。変わったのは秒付きの値（`2026/01/07 08:30:00`）で開くステップとその直後の DOM だけ。
+- 結果: ビルド → テスト全体で 160件すべて成功。画面確認（Chrome、datetime のデモ）: 既定の format で `2026/11/20 09:30` が入り、
+  開いたまま選んだ日にフォーカスがある。
+
 ## レビュー記録
 
 ### 第1回（Codex、設計書）
@@ -86,3 +95,7 @@
 | 1 | `YYYY` を `\d{4}` にすると、`formatDate` がゼロ埋めしない4桁未満の年（999年など）で自分が書いた値の時刻を読めない | minor | 採用 | 年のパターンを `(\d+)` にし、境界の年のテストを 3 に追加 |
 
 第2回の2件への対応は妥当と確認。blocker / major なし。
+
+### 第4回（Codex、コードレビュー）
+
+指摘なし（blocker / major なし）。
