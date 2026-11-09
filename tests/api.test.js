@@ -40,8 +40,9 @@ test('the classes keep their public methods', async (t) => {
         }
         assert.ok(Array.isArray(Picker.instances));
     }
+    // scrollToItem was removed in DP-0014 (unused; not part of the documented API)
     for (const m of ['openPicker', 'closePicker', 'setValue', 'getValue', 'selectHour', 'selectMinute',
-        'scrollToItem', 'scrollToSelection', 'destroy']) {
+        'scrollToSelection', 'destroy']) {
         assert.equal(typeof TimePicker.prototype[m], 'function', `TimePicker.prototype.${m}`);
     }
     assert.equal(typeof TimePicker.closeAllPickers, 'function');

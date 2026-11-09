@@ -23,8 +23,7 @@ export class TimePicker {
 
         // Default configuration
         this.config = {
-            minuteStep: 30, // 30, 15, 10, 5, 1
-            format: 'HH:mm',
+            minuteStep: 30, // a positive divisor of 60 (1, 5, 10, 15, 30...)
             ...options
         };
         // an invalid step (0, negative, not a divisor of 60...) falls back to 30
@@ -284,10 +283,6 @@ export class TimePicker {
         this.timeColumns.focusItem('hour');
     }
 
-    scrollToItem(container, value) {
-        TimeColumns.scrollToItem(container, value);
-    }
-
     scrollToSelection(container) {
         TimeColumns.scrollToSelection(container);
     }
@@ -298,12 +293,16 @@ export class TimePicker {
         this.overlay.classList.remove('show');
     }
 
+    /* Sets the value from a script ("HH:mm"; anything else is ignored) and shows it as the selection.
+       Like setting input.value, it fires no change event and does not open the picker. */
     setValue(timeString) {
         if (timeString && /^\d{2}:\d{2}$/.test(timeString)) {
             this.input.value = timeString;
             const [hour, minute] = timeString.split(':');
             this.selectedHour = hour;
             this.selectedMinute = minute;
+            this.timeColumns.select('hour', hour);
+            this.timeColumns.select('minute', minute);
         }
     }
 
