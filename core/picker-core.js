@@ -580,6 +580,16 @@ export class PickerCore {
         this.calendarGrid.appendChild(dayEl);
     }
 
+    /* Redraw an open calendar after the holidays changed (holiday.csv arrived), keeping the focused day focused.
+       A closed or destroyed picker does nothing: the calendar is drawn again when it opens. */
+    refreshHolidays() {
+        const mode = this.config.mode;
+        if ((mode !== 'date' && mode !== 'datetime') || !this.picker.classList.contains('show')) return;
+        const focusedDay = this._dayDates.get(document.activeElement);
+        this.updateCalendar();
+        if (focusedDay) this._focusDate(focusedDay);
+    }
+
     /* Is Today */
     isToday(date) { return this.isSameDay(date, new Date()); }
 
