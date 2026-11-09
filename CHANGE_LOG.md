@@ -2,6 +2,12 @@
 
 ## 2026-11-09
 
+### DP-0011 datepicker と datetimepicker を同じページで読み込むと二重初期化・TypeError になる
+
+- 自動初期化で、すでにピッカーが付いているラッパーを飛ばすようにした（印は `Symbol.for` のキーで要素に付けるので、2つのバンドルの間でも共有される）。
+- 共有の overlay（`.dp-overlay`）は、ページにピッカーが1つでも残っていれば消さず、開いているピッカーが1つでもあれば隠さないようにした
+  （クラスをまたいで判断する）。開くときに overlay がなければ作る。今までは片方の destroy でもう片方が TypeError になっていた。
+
 ### DP-0009 TimePicker.destroy() がイベントリスナーと overlay を外さない
 
 - `TimePicker.destroy()` で、input（click・keydown）と document（click・focusin）のリスナーを外すようにした。
