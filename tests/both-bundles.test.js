@@ -83,3 +83,23 @@ test('a destroyed wrapper can be initialized again', async (t) => {
     again.destroy();
     assert.equal(wrapper.querySelectorAll('.date-picker').length, 0);
 });
+
+test('two pickers made by hand on one wrapper: destroying one keeps the wrapper marked for auto-initialization', async (t) => {
+    const { DatePicker, DateTimePicker, document } = await start(t, '<div class="date-picker-wrapper" id="x"><input class="date-input"></div>');
+    const wrapper = document.getElementById('x');
+    for (const p of [...DatePicker.instances, ...DateTimePicker.instances]) p.destroy();
+
+    const a = new DatePicker(wrapper);
+    const b = new DateTimePicker(wrapper);
+    b.destroy();
+    // a later auto-initialization (another bundle loaded afterwards) must skip the wrapper: a is still there
+    const late = await loadModule('datetimepicker');
+    await settle();
+    assert.equal(late.DateTimePicker.instances.length, 0);
+    assert.equal(wrapper.querySelectorAll('.date-picker').length, 1);
+    a.destroy();
+
+    const again = await loadModule('datepicker');
+    await settle();
+    assert.equal(again.DatePicker.instances.length, 1, 'once all are destroyed, the wrapper is free again');
+});

@@ -3,7 +3,7 @@
 ---------------------------------------------------------- */
 
 import { loadHolidays } from './holidays.js';
-import { PICKER_KEY } from './picker-core.js';
+import { hasPicker } from './picker-core.js';
 
 /** Options common to the calendar pickers, from the wrapper's data attributes. */
 export function readDateOptions(wrapper) {
@@ -32,7 +32,7 @@ export function autoInitWrappers(PickerClass, readOptions, basePath) {
     const initWithHolidays = (holidays) => {
         document.querySelectorAll('.date-picker-wrapper').forEach(wrapper => {
             // skip a wrapper that already has a picker (e.g. from the other bundle on the same page)
-            if (wrapper[PICKER_KEY]) return;
+            if (hasPicker(wrapper)) return;
             new PickerClass(wrapper, { holidays, ...readOptions(wrapper) });
         });
     };

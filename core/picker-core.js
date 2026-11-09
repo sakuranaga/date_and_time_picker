@@ -13,10 +13,16 @@ import { TimeColumns } from './time-columns.js';
 const TIME_CLASSES = { item: 'dp-time-item', hourItem: 'dp-hour-item', minuteItem: 'dp-minute-item' };
 
 /**
- * Marks a wrapper that already has a picker. Symbol.for is shared by every bundle on the page (datepicker.js and
- * datetimepicker.js each carry their own copy of this module), so neither auto-initializes a wrapper the other took.
+ * The live pickers of a wrapper (a Set under this key on the element). Symbol.for is shared by every bundle on the page
+ * (datepicker.js and datetimepicker.js each carry their own copy of this module), so neither auto-initializes a wrapper
+ * that already has a picker of the other.
  */
 export const PICKER_KEY = Symbol.for('date-and-time-picker:picker');
+
+/** True when the wrapper has a live picker (of any bundle). */
+export function hasPicker(wrapper) {
+    return Boolean(wrapper[PICKER_KEY]?.size);
+}
 
 export class PickerCore {
     /**
@@ -30,7 +36,7 @@ export class PickerCore {
         this.wrapper = wrapper;
         this.input = wrapper.querySelector('.date-input');
         this._registry = registry;
-        wrapper[PICKER_KEY] = this;
+        (wrapper[PICKER_KEY] ||= new Set()).add(this);
         this._ariaLabel = ariaLabel;
 
         // Configuration
@@ -631,7 +637,11 @@ export class PickerCore {
         const idx = instances.indexOf(this);
         if (idx !== -1) instances.splice(idx, 1);
 
-        if (this.wrapper[PICKER_KEY] === this) delete this.wrapper[PICKER_KEY];
+        const live = this.wrapper[PICKER_KEY];
+        if (live) {
+            live.delete(this);
+            if (live.size === 0) delete this.wrapper[PICKER_KEY];
+        }
 
         /* Remove overlay when no picker of any class remains on the page */
         if (!document.querySelector('.date-picker')) {
