@@ -4,7 +4,7 @@
 
 import './timepicker.css';
 import { TimeColumns } from './core/time-columns.js';
-import { nearestTime, splitTimeValue } from './core/time-utils.js';
+import { nearestTime, splitTimeValue, normalizeMinuteStep } from './core/time-utils.js';
 
 const TIME_CLASSES = { item: 'tp-item', hourItem: 'tp-hour-item', minuteItem: 'tp-minute-item' };
 
@@ -27,6 +27,8 @@ export class TimePicker {
             format: 'HH:mm',
             ...options
         };
+        // an invalid step (0, negative, not a divisor of 60...) falls back to 30
+        this.config.minuteStep = normalizeMinuteStep(this.config.minuteStep);
 
         this.wrapper = this.input.parentElement;
         this.uniqueId = 'time-picker-' + Math.random().toString(36).substr(2, 9);
