@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     parseDateOption, startOfDay, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells,
-    addDays, addMonthsClamped, keyTargetDate,
+    addDays, addMonthsClamped, keyTargetDate, datePattern,
 } from '../../core/date-utils.js';
 
 const ymd = (d) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
@@ -130,4 +130,15 @@ test('keyTargetDate maps the navigation keys and returns null for others', () =>
     assert.deepEqual(ymd(keyTargetDate(d, 'PageUp')), [2025, 12, 15]);
     assert.equal(keyTargetDate(d, 'Home'), null);
     assert.equal(keyTargetDate(d, 'a'), null);
+});
+
+test('datePattern turns the first YYYY / MM / DD into groups and escapes everything else', () => {
+    assert.equal(datePattern('YYYY/MM/DD'), '(\\d+)/(\\d{2})/(\\d{2})');
+    assert.equal(datePattern('DD.MM.YYYY'), '(\\d{2})\\.(\\d{2})\\.(\\d+)');
+    assert.ok(new RegExp(`^${datePattern('YYYY (MM)+DD?')}$`).test('2026 (01)+20?'));
+    // only the first of each token is replaced, like formatDate
+    assert.ok(new RegExp(`^${datePattern('YYYY-MM-DD MM')}$`).test('2026-01-20 MM'));
+    for (const format of ['YYYY/MM/DD', 'YYYY-MM-DD', 'DD.MM.YYYY', 'YYYY年MM月DD日', 'YYYY MM:DD']) {
+        assert.ok(new RegExp(`^${datePattern(format)}$`).test(formatDate(new Date(2026, 0, 5), format)), format);
+    }
 });

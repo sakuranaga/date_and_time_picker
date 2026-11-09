@@ -18,12 +18,14 @@ HTML5標準の `<input type="date">` と `<input type="time">` には以下の�
 
 ## デモ
 
-- `index.html` - 日付ピッカーのデモ（テーマ切り替え付き）
-- `multi-time-picker.html` - 時刻ピッカーのデモ
+- `demo/index.html` - デモの一覧
+- `demo/date.html` - 日付ピッカーのデモ（テーマ切り替え付き）
+- `demo/time.html` - 時刻ピッカーのデモ
+- `demo/datetime.html` - 日付・時刻ピッカー（DateTimePicker）のデモ
 
-HTMLファイルをダブルクリックするだけで動作します。
+HTMLファイルをダブルクリックするだけで動作します（祝日の表示には `holiday.csv` の読み込みが必要なので、ローカルの Web サーバー経由で開いてください）。
 
-`index.html` にはデフォルト・ダーク・グリーン・パープル・ウォームの5テーマを切り替えるボタンが付いており、CSS変数によるデザインカスタマイズを実際に確認できます。
+`demo/date.html` にはデフォルト・ダーク・グリーン・パープル・ウォームの5テーマを切り替えるボタンが付いており、CSS変数によるデザインカスタマイズを実際に確認できます。
 
 ## 使い方
 
@@ -74,6 +76,31 @@ HTMLファイルをダブルクリックするだけで動作します。
 </body>
 </html>
 ```
+
+### 日付・時刻ピッカー（DateTimePicker）
+
+日付だけ・時刻だけ・日付と時刻を、1つのスクリプトで `data-mode` 属性によって切り替えるピッカーです。
+
+```html
+<!-- 日付＋時刻（15分刻み） -->
+<div class="date-picker-wrapper" data-mode="datetime" data-minute-step="15">
+    <input type="text" class="date-input" placeholder="年/月/日 時:分" readonly>
+</div>
+
+<!-- 時刻のみ -->
+<div class="date-picker-wrapper" data-mode="time">
+    <input type="text" class="date-input" placeholder="時:分" readonly>
+</div>
+
+<!-- 日付のみ（data-mode を省くと date） -->
+<div class="date-picker-wrapper">
+    <input type="text" class="date-input" placeholder="年/月/日" readonly>
+</div>
+
+<script src="dist/datetimepicker.js"></script>
+```
+
+日付ピッカー（`dist/datepicker.js`）とは同じクラス名（`.date-picker-wrapper`）を使うので、1つのページではどちらか一方だけを読み込んでください。
 
 ## オプション設定
 
@@ -132,6 +159,28 @@ HTMLファイルをダブルクリックするだけで動作します。
 | 属性 | 説明 | 値の例 |
 |------|------|--------|
 | `data-minute-step` | 分の刻み幅（デフォルト: `30`）。60 を割り切る正の整数。それ以外の値は `30` として扱う | `"1"`, `"5"`, `"10"`, `"15"`, `"30"` |
+
+### 日付・時刻ピッカー（DateTimePicker）
+
+属性はすべて `.date-picker-wrapper` に付けます。
+
+| 属性 | 説明 | 値の例 |
+|------|------|--------|
+| `data-mode` | `date`（日付のみ）・`time`（時刻のみ）・`datetime`（日付と時刻）。省くと `date` | `"datetime"` |
+| `data-minute-step` | 分の刻み幅（time / datetime。デフォルト: `30`）。60 を割り切る正の整数。それ以外の値は `30` として扱う | `"15"` |
+| `data-format` | 日付部分の出力フォーマット（date / datetime。デフォルト: `YYYY/MM/DD`）。datetime では、この日付の後に半角スペースと `HH:mm` が付く。time モードには効かない | `"YYYY-MM-DD"` → datetime なら `2026-01-20 14:30` |
+| `data-min-date` | 選択可能な最小日付（date / datetime） | `"today"`, `"2025-12-01"` |
+| `data-max-date` | 選択可能な最大日付（date / datetime） | `"today"`, `"2025-12-31"` |
+
+モードごとの振る舞い:
+
+- **date**: 日付ピッカーと同じ。日付を選ぶと閉じる。
+- **time**: 開くと現在時刻に近い時刻（入力済みならその時刻）を選んで入力する。時・分を選ぶたびに値が変わる。「クリア」で空に戻せる。
+- **datetime**: カレンダーと時・分の列が並ぶ。日付を選んでも閉じないので、続けて時刻を選べる（Esc か外側のクリックで閉じる）。
+  開いたとき、入力済みの値が「`data-format` の日付 + 半角スペース + `HH:mm`」の形ならその時刻を、そうでなければ現在時刻に近い時刻を選ぶ。
+  日付を選ぶまでは値は入らない。「クリア」で日付と時刻を空に戻せる。
+
+値が変わると input の `change` イベントが発火します。祝日の表示（`holiday.csv`）は日付ピッカーと同じです。
 
 ## 機能詳細
 

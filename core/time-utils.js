@@ -2,6 +2,8 @@
    core/time-utils.js : pure time helpers shared by the pickers
 ---------------------------------------------------------- */
 
+import { datePattern } from './date-utils.js';
+
 /** '00' .. '23' */
 export const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
 
@@ -46,13 +48,22 @@ export function nearestTime(now, step) {
 }
 
 /**
- * DateTimePicker's reading of an input value: 'time' finds the first HH:mm, 'datetime' needs HH:mm at the end.
+ * DateTimePicker's reading of a time mode value: the first HH:mm.
  * @returns {{ hour: string, minute: string } | null}
  */
-export function matchTimeValue(value, mode) {
-    const pattern = mode === 'datetime' ? /(\d{2}):(\d{2})$/ : /(\d{2}):(\d{2})/;
-    const match = value.match(pattern);
+export function matchTimeValue(value) {
+    const match = value.match(/(\d{2}):(\d{2})/);
     return match ? { hour: match[1], minute: match[2] } : null;
+}
+
+/**
+ * DateTimePicker's reading of a datetime value: the time only when the value is "<date in format> HH:mm",
+ * which is what the picker writes (a date-only value, another format or seconds give null).
+ * @returns {{ hour: string, minute: string } | null}
+ */
+export function matchDateTimeTime(value, format) {
+    const match = new RegExp(`^${datePattern(format)} (\\d{2}):(\\d{2})$`).exec(value);
+    return match ? { hour: match[match.length - 2], minute: match[match.length - 1] } : null;
 }
 
 /** TimePicker's reading of an input value: the parts around ':' (hour first, minute second). */

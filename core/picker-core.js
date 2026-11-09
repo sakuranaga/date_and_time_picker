@@ -6,7 +6,7 @@
 import {
     parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells, keyTargetDate,
 } from './date-utils.js';
-import { nearestTime, matchTimeValue, normalizeMinuteStep } from './time-utils.js';
+import { nearestTime, matchTimeValue, matchDateTimeTime, normalizeMinuteStep } from './time-utils.js';
 import { TimeColumns } from './time-columns.js';
 
 const TIME_CLASSES = { item: 'dp-time-item', hourItem: 'dp-hour-item', minuteItem: 'dp-minute-item' };
@@ -395,7 +395,9 @@ export class PickerCore {
 
         if (currentValue) {
             // Parse existing value
-            const parsed = matchTimeValue(currentValue, this.config.mode);
+            const parsed = this.config.mode === 'datetime'
+                ? matchDateTimeTime(currentValue, this.config.format)
+                : matchTimeValue(currentValue);
             if (parsed) {
                 hourToSelect = parsed.hour;
                 minuteToSelect = parsed.minute;
@@ -539,7 +541,8 @@ export class PickerCore {
             const timePart = (this.selectedHour !== null && this.selectedMinute !== null)
                 ? ` ${this.selectedHour}:${this.selectedMinute}`
                 : '';
-            this.input.value = `${formatDate(this.selectedDate, 'YYYY/MM/DD')}${timePart}`;
+            // the format applies to the date part; the time is appended as " HH:mm"
+            this.input.value = `${formatDate(this.selectedDate, this.config.format)}${timePart}`;
             this.input.dispatchEvent(new Event('change', { bubbles: true }));
             return;
         }

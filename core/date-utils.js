@@ -56,6 +56,20 @@ export function formatDate(date, format) {
         .replace('DD', d);
 }
 
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * A regular expression source matching what formatDate(date, format) writes: like formatDate, the first YYYY,
+ * MM and DD become groups ((\d+) for the year, which formatDate does not zero-pad; (\d{2}) for month and day)
+ * and every other character is literal.
+ */
+export function datePattern(format) {
+    return escapeRegExp(format)
+        .replace('YYYY', '(\\d+)')
+        .replace('MM', '(\\d{2})')
+        .replace('DD', '(\\d{2})');
+}
+
 /** The 42 cells (6 weeks from Sunday) shown for a month: [{ date, otherMonth }]. */
 export function buildMonthCells(year, month) {
     const cells = [];
