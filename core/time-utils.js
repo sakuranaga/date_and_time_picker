@@ -15,6 +15,11 @@ export function normalizeMinuteStep(step) {
     return Number.isInteger(step) && step > 0 && 60 % step === 0 ? step : DEFAULT_MINUTE_STEP;
 }
 
+/** Reads a data-minute-step attribute: the whole value must be a number (no parseInt leniency), then normalized. */
+export function parseMinuteStepAttribute(value) {
+    return normalizeMinuteStep(value === undefined || value.trim() === '' ? NaN : Number(value));
+}
+
 /** The minute values from 0 in steps of `step` (normalized), below 60. */
 export function minuteValues(step) {
     step = normalizeMinuteStep(step);

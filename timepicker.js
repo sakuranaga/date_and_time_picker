@@ -4,7 +4,7 @@
 
 import './timepicker.css';
 import { TimeColumns } from './core/time-columns.js';
-import { nearestTime, splitTimeValue, normalizeMinuteStep } from './core/time-utils.js';
+import { nearestTime, splitTimeValue, normalizeMinuteStep, parseMinuteStepAttribute } from './core/time-utils.js';
 
 const TIME_CLASSES = { item: 'tp-item', hourItem: 'tp-hour-item', minuteItem: 'tp-minute-item' };
 
@@ -294,7 +294,7 @@ export class TimePicker {
 if (typeof document !== 'undefined') {
     const init = () => {
         document.querySelectorAll('.tp-input').forEach(input => {
-            const step = parseInt(input.dataset.minuteStep, 10) || 30;
+            const step = parseMinuteStepAttribute(input.dataset.minuteStep);
             new TimePicker(input, { minuteStep: step });
         });
     };

@@ -62,10 +62,11 @@ function probePage(moduleName, html, construct = '') {
 }
 
 test('DateTimePicker: an invalid data-minute-step falls back to 30', () => {
-    const html = ['-15', '0', '7', 'abc', '15'].map((s) =>
+    const html = ['-15', '0', '7', 'abc', '15', '1.5', '15abc', ' 20 '].map((s) =>
         `<div class="date-picker-wrapper" data-mode="time" data-minute-step="${s}"><input class="date-input"></div>`).join('');
     const report = probePage('datetimepicker', html);
-    assert.deepEqual(report.map((r) => r.step), [30, 30, 30, 30, 15]);
+    // the whole attribute must be a number: '1.5' and '15abc' are not read as 1 and 15
+    assert.deepEqual(report.map((r) => r.step), [30, 30, 30, 30, 15, 30, 30, 20]);
     assert.deepEqual(report[0].minutes, ['00', '30']);
     assert.deepEqual(report[4].minutes, ['00', '15', '30', '45']);
 });
@@ -77,12 +78,20 @@ test('DateTimePicker: an invalid minuteStep option falls back to 30', () => {
 });
 
 test('TimePicker: an invalid data-minute-step or minuteStep option falls back to 30', () => {
-    const html = ['-15', '7', '20'].map((s) =>
+    const html = ['-15', '7', '20', '1.5', '15abc'].map((s) =>
         `<div class="tp-wrapper"><input class="tp-input" data-minute-step="${s}"></div>`).join('')
         + '<div class="tp-wrapper"><input id="manual"></div>';
     const report = probePage('timepicker', html,
         "new mod.TimePicker(env.document.getElementById('manual'), { minuteStep: -5 });");
-    assert.deepEqual(report.map((r) => r.step), [30, 30, 20, 30]);
+    assert.deepEqual(report.map((r) => r.step), [30, 30, 20, 30, 30, 30]);
     assert.deepEqual(report[0].minutes, ['00', '30']);
     assert.deepEqual(report[2].minutes, ['00', '20', '40']);
+});
+
+test('parseMinuteStepAttribute reads the whole attribute as a number', () => {
+    const out = probe(`
+        import { parseMinuteStepAttribute } from '${url('core/time-utils.js')}';
+        console.log(JSON.stringify(['15', ' 15 ', '1.5', '15abc', '', '  ', 'abc', '-15', '60'].map(parseMinuteStepAttribute)
+            .concat(parseMinuteStepAttribute(undefined))));`);
+    assert.deepEqual(out, [15, 15, 30, 30, 30, 30, 30, 30, 60, 30]);
 });
