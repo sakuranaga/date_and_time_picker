@@ -191,3 +191,7 @@ test('the calendar helpers keep years below 100', () => {
     assert.deepEqual(ymd(addDays(makeDate(99, 11, 31), 1)), [100, 1, 1]);
     assert.deepEqual(ymd(addMonthsClamped(makeDate(99, 0, 31), 1)), [99, 2, 28]);
 });
+
+test('parseDateOption keeps years below 100 in YYYY-M-D', () => {
+    assert.deepEqual(ymd(parseDateOption('0099-01-01')), [99, 1, 1]);
+});

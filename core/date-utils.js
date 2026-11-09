@@ -30,7 +30,7 @@ export function parseDateOption(value, now = new Date()) {
     // Parse YYYY-MM-DD format explicitly to avoid UTC/local timezone ambiguity
     const match = String(value).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
     if (match) {
-        return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+        return makeDate(parseInt(match[1], 10), parseInt(match[2], 10) - 1, parseInt(match[3], 10));
     }
     const parsed = new Date(value);
     return isNaN(parsed) ? null : parsed;

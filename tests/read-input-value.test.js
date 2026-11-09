@@ -182,3 +182,12 @@ test('a value in the year 99 is shown, navigated and picked in the year 99 (not 
     currentDay(wrapper, 10).click();
     assert.equal(input.value, '99/07/10');
 });
+
+test('min / max dates in the year 99 are compared in the year 99', async (t) => {
+    const { wrapper, input } = await start(t, 'datepicker', 'data-min-date="0099-05-05" data-max-date="0099-05-20"', '99/05/06');
+    input.click();
+    assert.ok(currentDay(wrapper, 4).disabled);
+    assert.ok(!currentDay(wrapper, 5).disabled);
+    assert.ok(!currentDay(wrapper, 20).disabled);
+    assert.ok(currentDay(wrapper, 21).disabled);
+});
