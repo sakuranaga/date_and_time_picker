@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { HOURS, minuteValues, nearestTime, matchTimeValue, splitTimeValue } from '../../core/time-utils.js';
+import { HOURS, minuteValues, nearestTime, matchTimeValue, matchDateTimeTime, splitTimeValue } from '../../core/time-utils.js';
+import { formatDate } from '../../core/date-utils.js';
 
 test('HOURS is 00..23', () => {
     assert.equal(HOURS.length, 24);
@@ -31,10 +32,26 @@ test('matchTimeValue (time mode) finds HH:mm anywhere', () => {
     assert.equal(matchTimeValue('abc', 'time'), null);
 });
 
-test('matchTimeValue (datetime mode) needs HH:mm at the end', () => {
-    assert.deepEqual(matchTimeValue('2026/01/20 14:30', 'datetime'), { hour: '14', minute: '30' });
-    assert.equal(matchTimeValue('2026/01/20', 'datetime'), null);
-    assert.deepEqual(matchTimeValue('08:30:00', 'datetime'), { hour: '30', minute: '00' });
+// DP-0006: the datetime time is read only from "<date in the format> HH:mm" (it used to be any trailing HH:mm,
+// so '08:30:00' gave 30:00 and a date ending in "01:30" was read as a time)
+test('matchDateTimeTime reads the time only after a date in the format', () => {
+    assert.deepEqual(matchDateTimeTime('2026/01/20 14:30', 'YYYY/MM/DD'), { hour: '14', minute: '30' });
+    assert.deepEqual(matchDateTimeTime('2026-01-20 14:30', 'YYYY-MM-DD'), { hour: '14', minute: '30' });
+    assert.deepEqual(matchDateTimeTime('20.01.2026 09:05', 'DD.MM.YYYY'), { hour: '09', minute: '05' });
+    assert.deepEqual(matchDateTimeTime('2026 01:30 14:00', 'YYYY MM:DD'), { hour: '14', minute: '00' });
+    assert.equal(matchDateTimeTime('2026/01/20', 'YYYY/MM/DD'), null);
+    assert.equal(matchDateTimeTime('2026/01:30', 'YYYY/MM:DD'), null);
+    assert.equal(matchDateTimeTime('2026 01:30', 'YYYY MM:DD'), null);
+    assert.equal(matchDateTimeTime('2026-01-20 14:30', 'YYYY/MM/DD'), null);
+    assert.equal(matchDateTimeTime('2026/01/07 08:30:00', 'YYYY/MM/DD'), null);
+    assert.equal(matchDateTimeTime('', 'YYYY/MM/DD'), null);
+});
+
+test('matchDateTimeTime reads back what formatDate wrote, including years below 1000 and above 9999', () => {
+    for (const year of [999, 2026, 10000]) {
+        const value = `${formatDate(new Date(year, 0, 20), 'YYYY/MM/DD')} 14:30`;
+        assert.deepEqual(matchDateTimeTime(value, 'YYYY/MM/DD'), { hour: '14', minute: '30' }, value);
+    }
 });
 
 test('splitTimeValue splits on the colon as TimePicker does', () => {
