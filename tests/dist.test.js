@@ -166,3 +166,22 @@ test('dist: datepicker.js and datetimepicker.js together give a wrapper one pick
         page.close();
     }
 });
+
+/* DP-0012: with both bundles the first one loaded takes the wrappers and is the only one to fetch holiday.csv */
+for (const [first, second, owner] of [
+    ['/dist/datepicker.js', '/lib/sub/datetimepicker.js', 'DatePicker'],
+    ['/dist/datetimepicker.js', '/lib/sub/datepicker.js', 'DateTimePicker'],
+]) {
+    test(`dist: ${first} in <head> then ${second} in the body: ${owner} takes the wrapper and fetches once`, async () => {
+        const page = await loadPage(`<head><script src="${first}"></script></head>`
+            + `<body><div class="date-picker-wrapper" id="w"><input class="date-input"></div><script src="${second}"></script></body>`);
+        try {
+            const other = owner === 'DatePicker' ? 'DateTimePicker' : 'DatePicker';
+            assert.equal(page.window[owner][owner].instances.length, 1);
+            assert.equal(page.window[other][other].instances.length, 0);
+            assert.deepEqual(page.csvRequests, ['http://localhost/dist/holiday.csv']);
+        } finally {
+            page.close();
+        }
+    });
+}
