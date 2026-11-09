@@ -1,6 +1,6 @@
 # 祝日 CSV の読み込みと自動初期化の順序（DP-0012）
 
-- ステータス: Reviewed
+- ステータス: Implemented
 - 課題: LAP DP-0012「自動初期化が holiday.csv の取得完了を待つ」
 - 作成: 2026-11-09
 
@@ -54,6 +54,13 @@
 - 変更: `core/auto-init.js`、`core/picker-core.js`、`dist/*.js`、`README.md`、`CHANGE_LOG.md`
 - 追加: `tests/holiday-loading.test.js`、`tests/dist.test.js` への追加
 
+## 実装時の差異
+
+- 設計どおり。README の祝日の節に、読み込みを待たないこと・読み込む場所・読み込まない条件を追記した。
+- golden は変化なし（開く前に取得が終わるシナリオのため）。
+- 結果: ビルド → テスト全体で 232件すべて成功。画面確認（Chrome）: 日付のデモで 2026年11月の 3日・23日が赤（rgb(214, 54, 56)）、
+  holiday.csv の取得は1回。datetime のデモでもピッカー3つ、取得1回。
+
 ## レビュー記録
 
 ### 第1回（Codex、設計書）
@@ -65,3 +72,7 @@
 | 3 | 両方のバンドルを読み込んだときの取得の回数と URL、resolveBasePath のタイミングの検証がない | minor | 採用 | 設計に resolveBasePath のタイミングを明記し、配布物のテストを追加 |
 
 blocker / major なし。minor はすべて採用。
+
+### 第2回（Codex、コードレビュー）
+
+指摘なし（blocker / major なし）。
