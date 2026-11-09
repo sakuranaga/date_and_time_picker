@@ -83,3 +83,32 @@ export function buildMonthCells(year, month) {
     }
     return cells;
 }
+
+/** A new Date `n` days after `date` (negative goes back), at the same time of day. */
+export function addDays(date, n) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + n,
+        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+}
+
+/** The same day of the month `n` months later (negative goes back), clamped to the last day of that month. */
+export function addMonthsClamped(date, n) {
+    const first = new Date(date.getFullYear(), date.getMonth() + n, 1);
+    const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+    return new Date(first.getFullYear(), first.getMonth(), Math.min(date.getDate(), lastDay));
+}
+
+/**
+ * Where a calendar navigation key moves from `date`: ← → one day, ↑ ↓ one week, PageUp / PageDown one month
+ * (clamped). Returns null for other keys (Home / End depend on the displayed month and are handled by the caller).
+ */
+export function keyTargetDate(date, key) {
+    switch (key) {
+        case 'ArrowRight': return addDays(date, 1);
+        case 'ArrowLeft': return addDays(date, -1);
+        case 'ArrowDown': return addDays(date, 7);
+        case 'ArrowUp': return addDays(date, -7);
+        case 'PageDown': return addMonthsClamped(date, 1);
+        case 'PageUp': return addMonthsClamped(date, -1);
+        default: return null;
+    }
+}

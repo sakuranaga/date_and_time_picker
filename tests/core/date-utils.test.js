@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
     parseDateOption, startOfDay, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells,
+    addDays, addMonthsClamped, keyTargetDate,
 } from '../../core/date-utils.js';
 
 const ymd = (d) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
@@ -102,4 +103,31 @@ test('buildMonthCells: leap year February and the December/January boundary', ()
     const dec = buildMonthCells(2025, 11);
     assert.deepEqual(ymd(dec.find((c) => !c.otherMonth).date), [2025, 12, 1]);
     assert.deepEqual(ymd(dec[41].date), [2026, 1, 10]);
+});
+
+test('addDays crosses months and years and keeps the time of day', () => {
+    assert.deepEqual(ymd(addDays(new Date(2026, 0, 31), 1)), [2026, 2, 1]);
+    assert.deepEqual(ymd(addDays(new Date(2026, 0, 1), -1)), [2025, 12, 31]);
+    assert.deepEqual(ymd(addDays(new Date(2028, 1, 28), 1)), [2028, 2, 29]);
+    assert.equal(addDays(new Date(2026, 0, 15, 10, 30), 7).getHours(), 10);
+});
+
+test('addMonthsClamped keeps the day of the month, clamped to the target month', () => {
+    assert.deepEqual(ymd(addMonthsClamped(new Date(2026, 0, 31), 1)), [2026, 2, 28]);
+    assert.deepEqual(ymd(addMonthsClamped(new Date(2028, 0, 31), 1)), [2028, 2, 29]);
+    assert.deepEqual(ymd(addMonthsClamped(new Date(2026, 2, 31), -1)), [2026, 2, 28]);
+    assert.deepEqual(ymd(addMonthsClamped(new Date(2026, 0, 15), -1)), [2025, 12, 15]);
+    assert.deepEqual(ymd(addMonthsClamped(new Date(2025, 11, 31), 1)), [2026, 1, 31]);
+});
+
+test('keyTargetDate maps the navigation keys and returns null for others', () => {
+    const d = new Date(2026, 0, 15);
+    assert.deepEqual(ymd(keyTargetDate(d, 'ArrowRight')), [2026, 1, 16]);
+    assert.deepEqual(ymd(keyTargetDate(d, 'ArrowLeft')), [2026, 1, 14]);
+    assert.deepEqual(ymd(keyTargetDate(d, 'ArrowDown')), [2026, 1, 22]);
+    assert.deepEqual(ymd(keyTargetDate(d, 'ArrowUp')), [2026, 1, 8]);
+    assert.deepEqual(ymd(keyTargetDate(d, 'PageDown')), [2026, 2, 15]);
+    assert.deepEqual(ymd(keyTargetDate(d, 'PageUp')), [2025, 12, 15]);
+    assert.equal(keyTargetDate(d, 'Home'), null);
+    assert.equal(keyTargetDate(d, 'a'), null);
 });

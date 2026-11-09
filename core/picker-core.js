@@ -4,7 +4,7 @@
 ---------------------------------------------------------- */
 
 import {
-    parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells,
+    parseDateOption, isOutOfRange, isSameDay, holidayKey, formatDate, buildMonthCells, keyTargetDate,
 } from './date-utils.js';
 import { nearestTime, matchTimeValue } from './time-utils.js';
 import { TimeColumns } from './time-columns.js';
@@ -46,6 +46,7 @@ export class PickerCore {
 
         this.selectedDate = null;
         this.viewDate = new Date();
+        this._dayDates = new WeakMap(); // filled by updateCalendar()
         this.selectedHour = null;
         this.selectedMinute = null;
 
@@ -260,87 +261,28 @@ export class PickerCore {
                 }
             });
 
-            /* Arrow Key Navigation in Calendar Grid */
+            /* Keyboard Navigation in Calendar Grid (moves by dates; switches the month when it crosses one) */
             this.calendarGrid.addEventListener('keydown', (e) => {
-                const dayButtons = Array.from(
-                    this.calendarGrid.querySelectorAll('.calendar-day:not(.disabled)')
-                );
-                const currentIdx = dayButtons.indexOf(document.activeElement);
-                if (currentIdx === -1) return;
+                const current = this._dayDates.get(document.activeElement);
+                if (!current) return;
 
-                let targetIdx = -1;
-                switch (e.key) {
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        targetIdx = currentIdx + 1;
-                        if (targetIdx >= dayButtons.length) {
-                            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
-                            this.updateCalendar();
-                            this.focusDayByIndex(0);
-                            return;
-                        }
-                        break;
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        targetIdx = currentIdx - 1;
-                        if (targetIdx < 0) {
-                            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
-                            this.updateCalendar();
-                            this.focusDayByIndex(-1);
-                            return;
-                        }
-                        break;
-                    case 'ArrowDown':
-                        e.preventDefault();
-                        targetIdx = currentIdx + 7;
-                        if (targetIdx >= dayButtons.length) {
-                            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
-                            this.updateCalendar();
-                            this.focusDayByIndex(0);
-                            return;
-                        }
-                        break;
-                    case 'ArrowUp':
-                        e.preventDefault();
-                        targetIdx = currentIdx - 7;
-                        if (targetIdx < 0) {
-                            this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
-                            this.updateCalendar();
-                            this.focusDayByIndex(-1);
-                            return;
-                        }
-                        break;
-                    case 'Home':
-                        e.preventDefault();
-                        targetIdx = 0;
-                        break;
-                    case 'End':
-                        e.preventDefault();
-                        targetIdx = dayButtons.length - 1;
-                        break;
-                    case 'PageUp':
-                        e.preventDefault();
-                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() - 1, 1);
-                        this.updateCalendar();
-                        this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
-                        return;
-                    case 'PageDown':
-                        e.preventDefault();
-                        this.viewDate = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, 1);
-                        this.updateCalendar();
-                        this.focusDayByIndex(Math.min(currentIdx, this.getEnabledDayCount() - 1));
-                        return;
-                    case 'Enter':
-                    case ' ':
-                        e.preventDefault();
-                        dayButtons[currentIdx].click();
-                        return;
-                    default:
-                        return;
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.activeElement.click();
+                    return;
                 }
-                if (targetIdx >= 0 && targetIdx < dayButtons.length) {
-                    dayButtons[targetIdx].focus();
+
+                let target;
+                if (e.key === 'Home' || e.key === 'End') {
+                    target = this._edgeEnabledDay(e.key === 'Home');
+                } else {
+                    target = keyTargetDate(current, e.key);
+                    if (target === null) return; // not a navigation key
                 }
+                e.preventDefault();
+                // beyond minDate / maxDate (or no enabled day): the focus stays where it is
+                if (!target || this.isDisabled(target)) return;
+                this._focusDate(target);
             });
         }
 
@@ -389,20 +331,24 @@ export class PickerCore {
         });
     }
 
-    /* Focus a day button by index (negative index counts from end) */
-    focusDayByIndex(index) {
-        const dayButtons = this.calendarGrid.querySelectorAll(
-            '.calendar-day:not(.disabled)'
-        );
-        if (dayButtons.length === 0) return;
-        const idx = index < 0 ? dayButtons.length + index : index;
-        const clamped = Math.max(0, Math.min(idx, dayButtons.length - 1));
-        dayButtons[clamped].focus();
+    /* Focus the button of `date`, switching the displayed month first when needed */
+    _focusDate(date) {
+        if (date.getFullYear() !== this.viewDate.getFullYear() || date.getMonth() !== this.viewDate.getMonth()) {
+            this.viewDate = new Date(date.getFullYear(), date.getMonth(), 1);
+            this.updateCalendar();
+        }
+        const button = Array.from(this.calendarGrid.querySelectorAll('.calendar-day:not(.other-month)'))
+            .find(b => this._dayDates.has(b) && this.isSameDay(this._dayDates.get(b), date));
+        if (button) button.focus();
     }
 
-    /* Get count of enabled day buttons */
-    getEnabledDayCount() {
-        return this.calendarGrid.querySelectorAll('.calendar-day:not(.disabled)').length;
+    /* The first (or last) enabled day of the displayed month, or null when there is none */
+    _edgeEnabledDay(first) {
+        const year = this.viewDate.getFullYear();
+        const month = this.viewDate.getMonth();
+        const days = buildMonthCells(year, month).filter(c => !c.otherMonth).map(c => c.date);
+        if (!first) days.reverse();
+        return days.find(d => !this.isDisabled(d)) || null;
     }
 
     /* Show Picker */
@@ -492,6 +438,7 @@ export class PickerCore {
         const month = this.viewDate.getMonth();
 
         this.monthYearDisplay.textContent = `${year}年${month + 1}月`;
+        this._dayDates = new WeakMap(); // enabled day button -> its date (keyboard navigation)
         this.clearButton.disabled = !this.selectedDate && this.selectedHour === null;
         this.calendarGrid.innerHTML = '';
 
@@ -541,6 +488,7 @@ export class PickerCore {
             dayEl.setAttribute('tabindex', '-1');
         } else {
             dayEl.setAttribute('tabindex', isOtherMonth ? '-1' : '0');
+            this._dayDates.set(dayEl, date);
             /* Click Selection */
             dayEl.addEventListener('click', (e) => {
                 e.stopPropagation();

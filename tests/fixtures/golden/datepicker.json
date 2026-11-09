@@ -237,7 +237,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "button.calendar-day|27",
+    "focus": "button.calendar-day|23",
     "timeouts": [],
     "instances": 2,
     "dom": [
@@ -259,7 +259,7 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "button.calendar-day.saturday.other-month|14",
+    "focus": "button.calendar-day.saturday|28",
     "timeouts": [],
     "instances": 2,
     "dom": [
@@ -270,11 +270,11 @@
   {
     "step": "enter on day",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [
-      "0=2026/03/14"
+      "0=2026/02/28"
     ],
     "open": [
       false,
@@ -287,14 +287,14 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "e536d0d821e04ac999e4271e4875f3e754b816a5bb1960eb06832390d39861b4"
     ]
   },
   {
     "step": "open 1 (min/max)",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [],
@@ -309,14 +309,14 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "af68ac9faee134e99cf8a3b7e02b4b3358fe97388863f1a8deb14da77be0a356"
     ]
   },
   {
     "step": "open 0 closes 1",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [],
@@ -327,18 +327,18 @@
     "overlays": [
       "<div class=\"dp-overlay show\"></div>"
     ],
-    "focus": "button.calendar-day.saturday.selected|14",
+    "focus": "button.calendar-day.saturday.selected|28",
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "75f2cf95d2ea0a7e2f249b01668537da618d4286b421b13bdb0d1efd1468d74c",
+      "1d511fb31fccbad53f81eebde2c8f47431d47521ad52e39375a705644513fc4e",
       "e701ca9b31c79ee90f764166d94dcffd6d09896998631d33621b5d8f907a60f1"
     ]
   },
   {
     "step": "escape",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [],
@@ -353,14 +353,14 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "e701ca9b31c79ee90f764166d94dcffd6d09896998631d33621b5d8f907a60f1"
     ]
   },
   {
     "step": "open 1 again",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [],
@@ -375,14 +375,14 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "af68ac9faee134e99cf8a3b7e02b4b3358fe97388863f1a8deb14da77be0a356"
     ]
   },
   {
     "step": "today out of range",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       ""
     ],
     "changes": [],
@@ -397,14 +397,14 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "af68ac9faee134e99cf8a3b7e02b4b3358fe97388863f1a8deb14da77be0a356"
     ]
   },
   {
     "step": "pick 10 on 1",
     "values": [
-      "2026/03/14",
+      "2026/02/28",
       "2026-01-10"
     ],
     "changes": [
@@ -421,7 +421,7 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "4f56746584f756f6b8d9619d7254ed8557abac82b44f6a5372d70849eccc0e3d",
+      "a2c1b3a16f1bd685159f3c070dde8b4ca525f9422c6d8f1a217a2010b79ad61e",
       "02b5d906358c344b8b681f9bff6424de5ff9563e54e452e423639cba5b93d122"
     ]
   },
@@ -445,7 +445,7 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "dc7067cbbc144d63e26188e2828841a1d90fca5759146cbdd4f88fa619a0fb42",
+      "890a6bff510e86149143637880baa45adca83f0b0d3896cc44abb444c79bcfab",
       "02b5d906358c344b8b681f9bff6424de5ff9563e54e452e423639cba5b93d122"
     ]
   },
@@ -467,7 +467,7 @@
     "timeouts": [],
     "instances": 2,
     "dom": [
-      "dc7067cbbc144d63e26188e2828841a1d90fca5759146cbdd4f88fa619a0fb42",
+      "890a6bff510e86149143637880baa45adca83f0b0d3896cc44abb444c79bcfab",
       "02b5d906358c344b8b681f9bff6424de5ff9563e54e452e423639cba5b93d122"
     ]
   },
